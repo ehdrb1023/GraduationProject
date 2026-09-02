@@ -1,0 +1,89 @@
+{
+ "rows": [
+  {
+   "tag": "S2-seed42_samoff_d20",
+   "seed": 42,
+   "rho": 0.0,
+   "acc0": 84.51,
+   "acc": 87.47,
+   "one": 0.1959,
+   "sym": 0.092178,
+   "pg": null
+  },
+  {
+   "tag": "S2-seed42_sam0.02_d20",
+   "seed": 42,
+   "rho": 0.02,
+   "acc0": 84.65,
+   "acc": 87.3,
+   "one": 0.1184,
+   "sym": 0.047511,
+   "pg": null
+  },
+  {
+   "tag": "S2-seed42_sam0.05_d20",
+   "seed": 42,
+   "rho": 0.05,
+   "acc0": 84.61,
+   "acc": 87.38,
+   "one": 0.0805,
+   "sym": 0.026022,
+   "pg": null
+  },
+  {
+   "tag": "S2-seed42_sam0.1_d20",
+   "seed": 42,
+   "rho": 0.1,
+   "acc0": 84.98,
+   "acc": 88.04,
+   "one": 0.0587,
+   "sym": 0.014177,
+   "pg": null
+  },
+  {
+   "tag": "S2-seed43_samoff_d20",
+   "seed": 43,
+   "rho": 0.0,
+   "acc0": 84.0,
+   "acc": 87.38,
+   "one": 0.2187,
+   "sym": 0.087426,
+   "pg": 3.1136
+  },
+  {
+   "tag": "S2-seed43_sam0.02_d20",
+   "seed": 43,
+   "rho": 0.02,
+   "acc0": 84.56,
+   "acc": 87.35,
+   "one": 0.1326,
+   "sym": 0.051208,
+   "pg": 2.0608
+  },
+  {
+   "tag": "S2-seed43_sam0.05_d20",
+   "seed": 43,
+   "rho": 0.05,
+   "acc0": 84.57,
+   "acc": 87.27,
+   "one": 0.1041,
+   "sym": 0.038754,
+   "pg": 1.3019
+  },
+  {
+   "tag": "S2-seed43_sam0.1_d20",
+   "seed": 43,
+   "rho": 0.1,
+   "acc0": 84.68,
+   "acc": 87.55,
+   "one": 0.0762,
+   "sym": 0.021537,
+   "pg": 1.1528
+  }
+ ],
+ "figures": [
+  "results/figures/fig1_rho_sweep.png",
+  "results/figures/fig2_decay_trajectories.png",
+  "results/figures/fig4_detrended_correlation.png"
+ ]
+}
