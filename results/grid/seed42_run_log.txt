@@ -1,0 +1,237 @@
+device : cuda (Tesla T4)
+torch  : 2.11.0+cu128
+출력   : /content/out
+시드 유틸 준비 완료
+데이터 함수 준비 완료
+Lion / SAMAscent / ResNet-18 준비 완료
+스케줄 / sharpness / 평가 함수 준비 완료
+그래프 훅 준비 완료 — 기본 꺼짐. 켜려면 LIVE["on"] = True
+학습 루프 준비 완료
+Stage 함수 준비 완료
+게이트 함수 준비 완료
+arm 4개 | 예상 66분 (1.1시간)
+CIFAR-10 다운로드 중...
+압축 해제 중...
+
+=== Stage 1 (seed 42) — 40 epochs ===
+
+[S1-s42|warmup] Ep [1/60] | 33.9s | Loss 1.6274 | Train 40.37% | Test 54.54% | lr 0.00007 | rho 0.0000
+[S1-s42|warmup] Ep [2/60] | 33.1s | Loss 1.1810 | Train 57.62% | Test 64.24% | lr 0.00013 | rho 0.0000 | Sharp1 0.8402 | SharpSym 0.451430
+[S1-s42|warmup] Ep [3/60] | 33.4s | Loss 1.0041 | Train 64.40% | Test 68.15% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [4/60] | 33.1s | Loss 0.8729 | Train 69.27% | Test 70.60% | lr 0.00020 | rho 0.0000 | Sharp1 0.5646 | SharpSym 0.309676
+[S1-s42|stable] Ep [5/60] | 33.3s | Loss 0.7875 | Train 72.48% | Test 73.39% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [6/60] | 32.4s | Loss 0.7260 | Train 74.49% | Test 76.22% | lr 0.00020 | rho 0.0000 | Sharp1 0.4313 | SharpSym 0.238791
+[S1-s42|stable] Ep [7/60] | 32.9s | Loss 0.6793 | Train 76.23% | Test 77.22% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [8/60] | 32.8s | Loss 0.6432 | Train 77.53% | Test 77.92% | lr 0.00020 | rho 0.0000 | Sharp1 0.3072 | SharpSym 0.156651
+[S1-s42|stable] Ep [9/60] | 33.3s | Loss 0.6115 | Train 78.65% | Test 78.38% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [10/60] | 33.3s | Loss 0.5847 | Train 79.78% | Test 78.53% | lr 0.00020 | rho 0.0000 | Sharp1 0.6194 | SharpSym 0.301587
+[S1-s42|stable] Ep [11/60] | 33.5s | Loss 0.5615 | Train 80.47% | Test 80.34% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [12/60] | 33.3s | Loss 0.5379 | Train 81.45% | Test 79.81% | lr 0.00020 | rho 0.0000 | Sharp1 0.3552 | SharpSym 0.149870
+[S1-s42|stable] Ep [13/60] | 32.6s | Loss 0.5244 | Train 81.95% | Test 81.14% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [14/60] | 32.5s | Loss 0.5094 | Train 82.20% | Test 81.33% | lr 0.00020 | rho 0.0000 | Sharp1 0.2443 | SharpSym 0.100542
+[S1-s42|stable] Ep [15/60] | 32.6s | Loss 0.4849 | Train 83.05% | Test 80.98% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [16/60] | 33.3s | Loss 0.4777 | Train 83.37% | Test 81.76% | lr 0.00020 | rho 0.0000 | Sharp1 0.2822 | SharpSym 0.123917
+[S1-s42|stable] Ep [17/60] | 33.8s | Loss 0.4640 | Train 83.83% | Test 82.11% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [18/60] | 33.9s | Loss 0.4512 | Train 84.21% | Test 82.26% | lr 0.00020 | rho 0.0000 | Sharp1 0.2550 | SharpSym 0.100254
+[S1-s42|stable] Ep [19/60] | 33.5s | Loss 0.4439 | Train 84.43% | Test 82.61% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [20/60] | 33.8s | Loss 0.4317 | Train 85.08% | Test 82.47% | lr 0.00020 | rho 0.0000 | Sharp1 0.2177 | SharpSym 0.073698
+[S1-s42|stable] Ep [21/60] | 32.6s | Loss 0.4197 | Train 85.35% | Test 82.45% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [22/60] | 33.1s | Loss 0.4158 | Train 85.54% | Test 82.94% | lr 0.00020 | rho 0.0000 | Sharp1 0.2043 | SharpSym 0.077365
+[S1-s42|stable] Ep [23/60] | 32.6s | Loss 0.4040 | Train 85.80% | Test 83.53% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [24/60] | 32.8s | Loss 0.3952 | Train 86.22% | Test 83.08% | lr 0.00020 | rho 0.0000 | Sharp1 0.4087 | SharpSym 0.200320
+[S1-s42|stable] Ep [25/60] | 33.5s | Loss 0.3874 | Train 86.48% | Test 83.79% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [26/60] | 33.5s | Loss 0.3819 | Train 86.79% | Test 83.35% | lr 0.00020 | rho 0.0000 | Sharp1 0.2498 | SharpSym 0.096890
+[S1-s42|stable] Ep [27/60] | 33.8s | Loss 0.3731 | Train 86.92% | Test 83.70% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [28/60] | 32.9s | Loss 0.3706 | Train 87.17% | Test 82.60% | lr 0.00020 | rho 0.0000 | Sharp1 0.2133 | SharpSym 0.078125
+[S1-s42|stable] Ep [29/60] | 32.5s | Loss 0.3700 | Train 87.16% | Test 84.19% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [30/60] | 32.8s | Loss 0.3645 | Train 87.17% | Test 82.69% | lr 0.00020 | rho 0.0000 | Sharp1 0.3515 | SharpSym 0.140801
+[S1-s42|stable] Ep [31/60] | 32.6s | Loss 0.3540 | Train 87.62% | Test 83.56% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [32/60] | 33.6s | Loss 0.3527 | Train 87.64% | Test 83.89% | lr 0.00020 | rho 0.0000 | Sharp1 0.2207 | SharpSym 0.076349
+[S1-s42|stable] Ep [33/60] | 33.7s | Loss 0.3472 | Train 87.84% | Test 83.24% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [34/60] | 34.0s | Loss 0.3467 | Train 87.93% | Test 83.64% | lr 0.00020 | rho 0.0000 | Sharp1 0.2052 | SharpSym 0.064666
+[S1-s42|stable] Ep [35/60] | 33.7s | Loss 0.3412 | Train 88.08% | Test 83.92% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [36/60] | 33.1s | Loss 0.3364 | Train 88.33% | Test 83.73% | lr 0.00020 | rho 0.0000 | Sharp1 0.2096 | SharpSym 0.069690
+[S1-s42|stable] Ep [37/60] | 32.3s | Loss 0.3347 | Train 88.31% | Test 84.35% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [38/60] | 32.4s | Loss 0.3301 | Train 88.47% | Test 83.90% | lr 0.00020 | rho 0.0000 | Sharp1 0.2500 | SharpSym 0.099239
+[S1-s42|stable] Ep [39/60] | 32.7s | Loss 0.3291 | Train 88.54% | Test 83.72% | lr 0.00020 | rho 0.0000
+[S1-s42|stable] Ep [40/60] | 33.8s | Loss 0.3197 | Train 88.75% | Test 84.74% | lr 0.00020 | rho 0.0000 | Sharp1 0.2293 | SharpSym 0.091132
+
+Stage 1 저장: /content/out/stage1_seed42.pt
+
+=== Stage 2 [seed42_samoff_d20] — 출발점 ep40: Test 84.74% | SharpSym 0.091132 ===
+
+[S2-seed42_samoff_d20|decay ] Ep [41/60] | 33.5s | Loss 0.3184 | Train 88.80% | Test 84.51% | lr 0.00019 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [42/60] | 33.0s | Loss 0.3074 | Train 89.37% | Test 84.39% | lr 0.00018 | rho 0.0000 | Sharp1 0.2285 | SharpSym 0.073571
+[S2-seed42_samoff_d20|decay ] Ep [43/60] | 33.0s | Loss 0.2934 | Train 89.87% | Test 84.34% | lr 0.00017 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [44/60] | 32.9s | Loss 0.2862 | Train 89.88% | Test 85.03% | lr 0.00016 | rho 0.0000 | Sharp1 0.2124 | SharpSym 0.077771
+[S2-seed42_samoff_d20|decay ] Ep [45/60] | 32.1s | Loss 0.2707 | Train 90.58% | Test 85.05% | lr 0.00015 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [46/60] | 32.4s | Loss 0.2618 | Train 90.82% | Test 85.46% | lr 0.00014 | rho 0.0000 | Sharp1 0.2581 | SharpSym 0.101600
+[S2-seed42_samoff_d20|decay ] Ep [47/60] | 33.0s | Loss 0.2491 | Train 91.17% | Test 84.86% | lr 0.00013 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [48/60] | 33.6s | Loss 0.2342 | Train 91.72% | Test 85.70% | lr 0.00012 | rho 0.0000 | Sharp1 0.2576 | SharpSym 0.099334
+[S2-seed42_samoff_d20|decay ] Ep [49/60] | 33.8s | Loss 0.2223 | Train 92.16% | Test 85.73% | lr 0.00011 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [50/60] | 34.0s | Loss 0.2097 | Train 92.47% | Test 85.69% | lr 0.00010 | rho 0.0000 | Sharp1 0.2487 | SharpSym 0.097257
+[S2-seed42_samoff_d20|decay ] Ep [51/60] | 33.5s | Loss 0.1993 | Train 93.09% | Test 85.98% | lr 0.00009 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [52/60] | 32.5s | Loss 0.1793 | Train 93.79% | Test 85.86% | lr 0.00008 | rho 0.0000 | Sharp1 0.2690 | SharpSym 0.131272
+[S2-seed42_samoff_d20|decay ] Ep [53/60] | 32.2s | Loss 0.1682 | Train 93.95% | Test 86.14% | lr 0.00007 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [54/60] | 32.2s | Loss 0.1548 | Train 94.56% | Test 86.00% | lr 0.00006 | rho 0.0000 | Sharp1 0.2171 | SharpSym 0.093125
+[S2-seed42_samoff_d20|decay ] Ep [55/60] | 33.2s | Loss 0.1418 | Train 94.98% | Test 86.29% | lr 0.00005 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [56/60] | 33.7s | Loss 0.1238 | Train 95.65% | Test 86.78% | lr 0.00004 | rho 0.0000 | Sharp1 0.1784 | SharpSym 0.070726
+[S2-seed42_samoff_d20|decay ] Ep [57/60] | 33.6s | Loss 0.1102 | Train 96.07% | Test 86.68% | lr 0.00003 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [58/60] | 32.9s | Loss 0.1034 | Train 96.36% | Test 87.10% | lr 0.00002 | rho 0.0000 | Sharp1 0.2486 | SharpSym 0.124234
+[S2-seed42_samoff_d20|decay ] Ep [59/60] | 32.1s | Loss 0.0906 | Train 96.80% | Test 87.50% | lr 0.00001 | rho 0.0000
+[S2-seed42_samoff_d20|decay ] Ep [60/60] | 31.9s | Loss 0.0866 | Train 97.02% | Test 87.47% | lr 0.00000 | rho 0.0000 | Sharp1 0.1959 | SharpSym 0.092178
+
+=== [seed42_samoff_d20] 완료 ===
+  Test     84.74% -> 87.47% (+2.73%p)
+  SharpSym 0.091132 -> 0.092178
+  11.0분 | 저장: /content/out/arm_seed42_samoff_d20.json
+
+=== Stage 2 [seed42_sam0.02_d20] — 출발점 ep40: Test 84.74% | SharpSym 0.091132 ===
+
+[S2-seed42_sam0.02_d20|decay ] Ep [41/60] | 48.9s | Loss 0.3129 | Train 88.95% | Test 84.65% | lr 0.00019 | rho 0.0067
+[S2-seed42_sam0.02_d20|decay ] Ep [42/60] | 49.2s | Loss 0.3037 | Train 89.37% | Test 85.19% | lr 0.00018 | rho 0.0133 | Sharp1 0.1927 | SharpSym 0.064907
+[S2-seed42_sam0.02_d20|decay ] Ep [43/60] | 49.5s | Loss 0.2876 | Train 89.90% | Test 85.12% | lr 0.00017 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [44/60] | 49.6s | Loss 0.2756 | Train 90.46% | Test 85.82% | lr 0.00016 | rho 0.0200 | Sharp1 0.1797 | SharpSym 0.058904
+[S2-seed42_sam0.02_d20|decay ] Ep [45/60] | 49.5s | Loss 0.2612 | Train 90.94% | Test 85.53% | lr 0.00015 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [46/60] | 49.7s | Loss 0.2501 | Train 91.27% | Test 85.84% | lr 0.00014 | rho 0.0200 | Sharp1 0.1659 | SharpSym 0.052485
+[S2-seed42_sam0.02_d20|decay ] Ep [47/60] | 49.7s | Loss 0.2387 | Train 91.76% | Test 85.44% | lr 0.00013 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [48/60] | 49.5s | Loss 0.2243 | Train 92.19% | Test 85.96% | lr 0.00012 | rho 0.0200 | Sharp1 0.1634 | SharpSym 0.053599
+[S2-seed42_sam0.02_d20|decay ] Ep [49/60] | 49.4s | Loss 0.2108 | Train 92.76% | Test 85.67% | lr 0.00011 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [50/60] | 49.8s | Loss 0.2023 | Train 92.94% | Test 86.06% | lr 0.00010 | rho 0.0200 | Sharp1 0.1593 | SharpSym 0.052579
+[S2-seed42_sam0.02_d20|decay ] Ep [51/60] | 49.8s | Loss 0.1857 | Train 93.58% | Test 86.15% | lr 0.00009 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [52/60] | 49.8s | Loss 0.1727 | Train 93.98% | Test 86.63% | lr 0.00008 | rho 0.0200 | Sharp1 0.1341 | SharpSym 0.045972
+[S2-seed42_sam0.02_d20|decay ] Ep [53/60] | 49.9s | Loss 0.1603 | Train 94.49% | Test 86.23% | lr 0.00007 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [54/60] | 49.8s | Loss 0.1519 | Train 94.74% | Test 86.71% | lr 0.00006 | rho 0.0200 | Sharp1 0.1470 | SharpSym 0.054860
+[S2-seed42_sam0.02_d20|decay ] Ep [55/60] | 49.3s | Loss 0.1347 | Train 95.41% | Test 86.64% | lr 0.00005 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [56/60] | 49.8s | Loss 0.1242 | Train 95.79% | Test 86.61% | lr 0.00004 | rho 0.0200 | Sharp1 0.1580 | SharpSym 0.061955
+[S2-seed42_sam0.02_d20|decay ] Ep [57/60] | 49.6s | Loss 0.1094 | Train 96.31% | Test 86.94% | lr 0.00003 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [58/60] | 49.7s | Loss 0.1030 | Train 96.51% | Test 87.03% | lr 0.00002 | rho 0.0200 | Sharp1 0.1383 | SharpSym 0.056992
+[S2-seed42_sam0.02_d20|decay ] Ep [59/60] | 49.7s | Loss 0.0907 | Train 97.06% | Test 87.32% | lr 0.00001 | rho 0.0200
+[S2-seed42_sam0.02_d20|decay ] Ep [60/60] | 50.2s | Loss 0.0881 | Train 97.16% | Test 87.30% | lr 0.00000 | rho 0.0200 | Sharp1 0.1184 | SharpSym 0.047511
+
+=== [seed42_sam0.02_d20] 완료 ===
+  Test     84.74% -> 87.30% (+2.56%p)
+  SharpSym 0.091132 -> 0.047511
+  16.5분 | 저장: /content/out/arm_seed42_sam0.02_d20.json
+
+=== Stage 2 [seed42_sam0.05_d20] — 출발점 ep40: Test 84.74% | SharpSym 0.091132 ===
+
+[S2-seed42_sam0.05_d20|decay ] Ep [41/60] | 49.1s | Loss 0.3129 | Train 88.97% | Test 84.61% | lr 0.00019 | rho 0.0167
+[S2-seed42_sam0.05_d20|decay ] Ep [42/60] | 49.7s | Loss 0.3024 | Train 89.41% | Test 85.12% | lr 0.00018 | rho 0.0333 | Sharp1 0.1672 | SharpSym 0.048301
+[S2-seed42_sam0.05_d20|decay ] Ep [43/60] | 49.5s | Loss 0.2848 | Train 90.28% | Test 84.92% | lr 0.00017 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [44/60] | 49.9s | Loss 0.2761 | Train 90.59% | Test 85.58% | lr 0.00016 | rho 0.0500 | Sharp1 0.1161 | SharpSym 0.027377
+[S2-seed42_sam0.05_d20|decay ] Ep [45/60] | 49.7s | Loss 0.2610 | Train 91.14% | Test 85.61% | lr 0.00015 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [46/60] | 50.0s | Loss 0.2518 | Train 91.38% | Test 85.95% | lr 0.00014 | rho 0.0500 | Sharp1 0.1184 | SharpSym 0.032897
+[S2-seed42_sam0.05_d20|decay ] Ep [47/60] | 49.5s | Loss 0.2394 | Train 91.85% | Test 85.84% | lr 0.00013 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [48/60] | 49.7s | Loss 0.2238 | Train 92.43% | Test 86.29% | lr 0.00012 | rho 0.0500 | Sharp1 0.1178 | SharpSym 0.031199
+[S2-seed42_sam0.05_d20|decay ] Ep [49/60] | 49.9s | Loss 0.2101 | Train 93.13% | Test 86.01% | lr 0.00011 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [50/60] | 49.9s | Loss 0.2019 | Train 93.13% | Test 86.36% | lr 0.00010 | rho 0.0500 | Sharp1 0.1467 | SharpSym 0.046306
+[S2-seed42_sam0.05_d20|decay ] Ep [51/60] | 49.7s | Loss 0.1863 | Train 93.76% | Test 86.47% | lr 0.00009 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [52/60] | 49.8s | Loss 0.1753 | Train 94.14% | Test 86.82% | lr 0.00008 | rho 0.0500 | Sharp1 0.1180 | SharpSym 0.035300
+[S2-seed42_sam0.05_d20|decay ] Ep [53/60] | 49.7s | Loss 0.1640 | Train 94.59% | Test 86.43% | lr 0.00007 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [54/60] | 49.2s | Loss 0.1541 | Train 94.84% | Test 86.95% | lr 0.00006 | rho 0.0500 | Sharp1 0.0927 | SharpSym 0.028719
+[S2-seed42_sam0.05_d20|decay ] Ep [55/60] | 49.5s | Loss 0.1391 | Train 95.43% | Test 86.75% | lr 0.00005 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [56/60] | 49.6s | Loss 0.1274 | Train 95.98% | Test 87.04% | lr 0.00004 | rho 0.0500 | Sharp1 0.1084 | SharpSym 0.035761
+[S2-seed42_sam0.05_d20|decay ] Ep [57/60] | 49.5s | Loss 0.1163 | Train 96.28% | Test 87.43% | lr 0.00003 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [58/60] | 49.6s | Loss 0.1084 | Train 96.69% | Test 87.34% | lr 0.00002 | rho 0.0500 | Sharp1 0.0954 | SharpSym 0.032129
+[S2-seed42_sam0.05_d20|decay ] Ep [59/60] | 49.6s | Loss 0.0995 | Train 97.08% | Test 87.47% | lr 0.00001 | rho 0.0500
+[S2-seed42_sam0.05_d20|decay ] Ep [60/60] | 49.6s | Loss 0.0972 | Train 97.08% | Test 87.38% | lr 0.00000 | rho 0.0500 | Sharp1 0.0805 | SharpSym 0.026022
+
+=== [seed42_sam0.05_d20] 완료 ===
+  Test     84.74% -> 87.38% (+2.64%p)
+  SharpSym 0.091132 -> 0.026022
+  16.5분 | 저장: /content/out/arm_seed42_sam0.05_d20.json
+
+=== Stage 2 [seed42_sam0.1_d20] — 출발점 ep40: Test 84.74% | SharpSym 0.091132 ===
+
+[S2-seed42_sam0.1_d20|decay ] Ep [41/60] | 49.3s | Loss 0.3151 | Train 89.00% | Test 84.98% | lr 0.00019 | rho 0.0333
+[S2-seed42_sam0.1_d20|decay ] Ep [42/60] | 49.2s | Loss 0.3076 | Train 89.56% | Test 85.36% | lr 0.00018 | rho 0.0667 | Sharp1 0.1428 | SharpSym 0.041127
+[S2-seed42_sam0.1_d20|decay ] Ep [43/60] | 49.4s | Loss 0.2965 | Train 90.25% | Test 85.41% | lr 0.00017 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [44/60] | 49.5s | Loss 0.2892 | Train 90.62% | Test 85.96% | lr 0.00016 | rho 0.1000 | Sharp1 0.0982 | SharpSym 0.021415
+[S2-seed42_sam0.1_d20|decay ] Ep [45/60] | 49.6s | Loss 0.2745 | Train 91.15% | Test 85.71% | lr 0.00015 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [46/60] | 49.5s | Loss 0.2630 | Train 91.35% | Test 86.54% | lr 0.00014 | rho 0.1000 | Sharp1 0.0923 | SharpSym 0.020722
+[S2-seed42_sam0.1_d20|decay ] Ep [47/60] | 49.5s | Loss 0.2500 | Train 91.93% | Test 86.37% | lr 0.00013 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [48/60] | 49.6s | Loss 0.2363 | Train 92.41% | Test 86.66% | lr 0.00012 | rho 0.1000 | Sharp1 0.0870 | SharpSym 0.021207
+[S2-seed42_sam0.1_d20|decay ] Ep [49/60] | 49.1s | Loss 0.2198 | Train 92.98% | Test 86.73% | lr 0.00011 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [50/60] | 49.6s | Loss 0.2117 | Train 93.25% | Test 86.86% | lr 0.00010 | rho 0.1000 | Sharp1 0.0977 | SharpSym 0.026283
+[S2-seed42_sam0.1_d20|decay ] Ep [51/60] | 49.4s | Loss 0.2003 | Train 93.65% | Test 86.85% | lr 0.00009 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [52/60] | 49.7s | Loss 0.1882 | Train 94.12% | Test 87.27% | lr 0.00008 | rho 0.1000 | Sharp1 0.0835 | SharpSym 0.019694
+[S2-seed42_sam0.1_d20|decay ] Ep [53/60] | 49.7s | Loss 0.1775 | Train 94.52% | Test 87.13% | lr 0.00007 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [54/60] | 49.6s | Loss 0.1673 | Train 94.90% | Test 87.25% | lr 0.00006 | rho 0.1000 | Sharp1 0.0819 | SharpSym 0.023302
+[S2-seed42_sam0.1_d20|decay ] Ep [55/60] | 49.4s | Loss 0.1556 | Train 95.31% | Test 87.16% | lr 0.00005 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [56/60] | 49.1s | Loss 0.1456 | Train 95.71% | Test 87.43% | lr 0.00004 | rho 0.1000 | Sharp1 0.0894 | SharpSym 0.026195
+[S2-seed42_sam0.1_d20|decay ] Ep [57/60] | 49.4s | Loss 0.1334 | Train 96.17% | Test 87.56% | lr 0.00003 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [58/60] | 49.5s | Loss 0.1261 | Train 96.34% | Test 87.89% | lr 0.00002 | rho 0.1000 | Sharp1 0.0789 | SharpSym 0.025193
+[S2-seed42_sam0.1_d20|decay ] Ep [59/60] | 49.4s | Loss 0.1184 | Train 96.81% | Test 87.84% | lr 0.00001 | rho 0.1000
+[S2-seed42_sam0.1_d20|decay ] Ep [60/60] | 49.5s | Loss 0.1152 | Train 96.83% | Test 88.04% | lr 0.00000 | rho 0.1000 | Sharp1 0.0587 | SharpSym 0.014177
+
+=== [seed42_sam0.1_d20] 완료 ===
+  Test     84.74% -> 88.04% (+3.30%p)
+  SharpSym 0.091132 -> 0.014177
+  16.5분 | 저장: /content/out/arm_seed42_sam0.1_d20.json
+
+그리드 완료
+ seed    rho    acc0    acc1      one         sym     |g|    min
+----------------------------------------------------------------
+   42   0.00   84.74   87.47   0.1959    0.092178   2.036   11.0
+   42   0.02   84.74   87.30   0.1184    0.047511   1.481   16.5
+   42   0.05   84.74   87.38   0.0805    0.026022   1.259   16.5
+   42   0.10   84.74   88.04   0.0587    0.014177   0.911   16.5
+----------------------------------------------------------------
+one = 단측 sharpness | sym = 대칭(곡률) | |g| = probe grad norm
+====================================================================================
+Gate A — sharpness 지표가 곡률을 재고 있는가
+====================================================================================
+기준: 대칭/단측 비율 평균 ≥ 0.30 이고, 대칭이 |g| 와 완전상관(>0.95)이 아닐 것
+
+arm                                  one         sym      |g|  sym/one
+----------------------------------------------------------------------
+seed42_sam0.02_d20                0.1184    0.047511    1.481    0.401
+seed42_sam0.05_d20                0.0805    0.026022    1.259    0.323
+seed42_sam0.1_d20                 0.0587    0.014177    0.911    0.241
+seed42_samoff_d20                 0.1959    0.092178    2.036    0.470
+----------------------------------------------------------------------
+
+대칭/단측 비율 평균 : 0.359 (sd 0.099)
+(one−sym) ~ ρ|g|    : +0.989   ← 이론대로면 +1 근처
+sym ~ |g|           : +0.986   ← +1 근처면 곡률도 |g| 대리물
+
+▶ 실패 → 사전등록 대응: "기존 지표는 곡률이 아니라 grad norm 의 대리물이었다"로
+   프레이밍 전환. 방법론적 기여가 주 결과가 된다.
+
+====================================================================================
+Gate B — sharpness 감소가 시드에 걸쳐 일관적인가 (final_symmetric)
+====================================================================================
+기준: 5/5 → p=0.031 통과 | 4/5 → 경향만 기술 | 3/5 이하 → 발견 철회
+
+  seed          off           on       Δsharp     Δacc
+------------------------------------------------------
+    42     0.092178     0.026022    -0.066157    -0.09
+------------------------------------------------------
+
+sam_on 이 더 낮음: 1/1  부호검정 p = 0.5000
+Δsharpness -0.066157 ± nan
+Δaccuracy  -0.090 ± nan %p
+
+▶ 판정 불가 — 시드가 1개뿐이다. 부호검정은 5시드부터 p=0.031 이 된다.
+   (3시드 p=0.125, 4시드 p=0.0625 — 어느 쪽도 0.05 를 넘지 못한다)
+
+====================================================================================
+Gate C — rho 반응이 sharpness 와 accuracy 에서 갈리는가
+====================================================================================
+기준: sharpness 는 ρ에 단조 감소, accuracy 는 평평(변동폭 ≤ 2×시드 sd) → 통과
+
+   rho   n         sharp         ±sd       acc      ±sd
+-------------------------------------------------------
+  0.00   1      0.092178         nan     87.47      nan
+  0.02   1      0.047511         nan     87.30      nan
+  0.05   1      0.026022         nan     87.38      nan
+  0.10   1      0.014177         nan     88.04      nan
+-------------------------------------------------------
+
+sharpness ρ 단조 감소 : 예
+accuracy 변동폭       : 0.740 %p (시드 sd 최대 nan)
+
+▶ 부분 통과 (둘 다 단조) → "ρ에 비례해 이득" 실용 가이드로 전환
+
+/content/out/phase1_results.tar.gz  (81 KB)

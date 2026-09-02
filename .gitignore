@@ -4,6 +4,8 @@
 #   *.pt     : 체크포인트, 용량이 크다
 results/parsed/
 results/phase0/
+# grid/ 는 실측 원본이므로 커밋한다 (아카이브와 달리 재생성 불가)
+results/grid/*.tar.gz
 results/**/*.pt
 results/**/*.pth
 results/**/*.tgz
