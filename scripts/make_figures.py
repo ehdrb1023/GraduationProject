@@ -244,6 +244,73 @@ def fig_detrend(plt):
     return save(fig, 'fig4_detrended_correlation', plt)
 
 
+
+def fig_narrative(rows, plt):
+    """
+    프로젝트가 어떻게 지금 질문에 도달했는가 — 발표 도입부용.
+
+    두 축을 나란히 두되 **같은 그림 안에서도 분리**한다.
+    베이스라인(SGD/AdamW/SAM)과 WSD 라인은 augmentation·에폭·옵티마이저가 달라
+    직접 비교가 성립하지 않는다 (docs/PROGRESS.md §3). 한 축에 얹으면 거짓말이 된다.
+    """
+    if not rows:
+        return None
+    by = defaultdict(lambda: {'sym': [], 'acc': []})
+    for r in rows:
+        by[r['rho']]['sym'].append(r['sym'])
+        by[r['rho']]['acc'].append(r['acc'])
+    rhos = sorted(by)
+    if 0.0 not in by:
+        return None
+
+    fig, ax = plt.subplots(1, 2, figsize=(13, 4.6),
+                           gridspec_kw={'width_ratios': [1.15, 1]})
+
+    # ── 축 1: 옵티마이저 비교 (7~8월에 한 것) ──────────────────────────
+    names = ['SGD', 'AdamW', 'SAM', 'Muon\n(best)', 'Muon+SAM\n(hybrid)']
+    accs = [94.22, 92.93, 94.69, 86.20, 86.79]
+    cols = ['#999', '#999', '#2ca02c', '#d62728', '#d62728']
+    b = ax[0].bar(range(len(names)), accs, .6, color=cols)
+    ax[0].set_ylim(80, 97)
+    ax[0].set_xticks(range(len(names)))
+    ax[0].set_xticklabels(names, fontsize=8)
+    ax[0].set_ylabel('Test accuracy (%)')
+    ax[0].set_title('Axis 1 — "which optimizer wins?"  (Jul–Aug)', fontsize=11)
+    ax[0].grid(alpha=.3, axis='y')
+    for r, a in zip(b, accs):
+        ax[0].annotate(f'{a:.1f}', (r.get_x()+r.get_width()/2, a), ha='center',
+                       va='bottom', fontsize=8)
+    ax[0].axhline(94.69, color='#2ca02c', ls='--', lw=1, alpha=.6)
+    ax[0].annotate('combining optimizers never beat plain SAM\n→ this axis stalled',
+                   xy=(3.5, 88.5), fontsize=8.5, ha='center', color='#d62728')
+
+    # ── 축 2: SAM 온오프 (지금 하는 것) ────────────────────────────────
+    bs, ba = st.mean(by[0.0]['sym']), st.mean(by[0.0]['acc'])
+    rel_s = [(st.mean(by[r]['sym'])/bs - 1)*100 for r in rhos]
+    rel_a = [(st.mean(by[r]['acc'])/ba - 1)*100 for r in rhos]
+    ax[1].plot(rhos, rel_s, 'o-', ms=7, lw=2.2, color='#7048b6', label='curvature')
+    ax[1].plot(rhos, rel_a, 's-', ms=7, lw=2.2, color='#1f77b4', label='test accuracy')
+    ax[1].axhline(0, color='k', lw=.8)
+    ax[1].set_xlabel('SAM radius  $\\rho$  (decay phase only)')
+    ax[1].set_ylabel('change vs $\\rho{=}0$  (%)')
+    ax[1].set_title('Axis 2 — "does flatness buy generalization?"  (Sep)', fontsize=11)
+    ax[1].legend(fontsize=9, loc='lower left'); ax[1].grid(alpha=.3)
+    ax[1].annotate(f'curvature {rel_s[-1]:+.0f}%', xy=(rhos[-1], rel_s[-1]),
+                   fontsize=11, color='#7048b6', fontweight='bold', ha='right',
+                   xytext=(-8, 14), textcoords='offset points')
+    ax[1].annotate(f'accuracy {rel_a[-1]:+.2f}%', xy=(rhos[-1], rel_a[-1]),
+                   fontsize=11, color='#1f77b4', fontweight='bold', ha='right',
+                   xytext=(-8, -18), textcoords='offset points')
+    ax[1].set_ylim(min(rel_s) - 12, 12)
+
+    fig.suptitle('How the project shifted:  from "build a better optimizer" '
+                 'to "is flatness the mechanism?"', fontsize=12.5)
+    fig.text(.5, -.03, 'The two panels are different experimental setups '
+             '(augmentation, epochs, optimizer) and are NOT directly comparable.',
+             ha='center', fontsize=8, style='italic', color='#666')
+    plt.tight_layout()
+    return save(fig, 'fig5_project_narrative', plt)
+
 def save(fig, name, plt):
     os.makedirs(OUT, exist_ok=True)
     path = os.path.join(OUT, name + '.png')
@@ -280,7 +347,8 @@ def main():
 
     print('\n그림 생성')
     made = [f for f in [fig_rho_sweep(rows, plt), fig_trajectories(runs, plt),
-                        fig_metric_problem(rows, runs, plt), fig_detrend(plt)] if f]
+                        fig_metric_problem(rows, runs, plt), fig_detrend(plt),
+                        fig_narrative(rows, plt)] if f]
     os.makedirs(OUT, exist_ok=True)
     json.dump({'rows': rows, 'figures': made},
               open(os.path.join(OUT, 'figure_data.json'), 'w'), indent=1)

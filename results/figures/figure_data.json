@@ -125,6 +125,7 @@
   "results/figures/fig1_rho_sweep.png",
   "results/figures/fig2_decay_trajectories.png",
   "results/figures/fig3_metric_decomposition.png",
-  "results/figures/fig4_detrended_correlation.png"
+  "results/figures/fig4_detrended_correlation.png",
+  "results/figures/fig5_project_narrative.png"
  ]
 }
