@@ -24,6 +24,7 @@ from collections import defaultdict
 OUT = 'results/figures'
 GRID = 'results/grid'
 PARSED = 'results/parsed'
+RHO_PROBE = 0.05      # 노트북 CFG 의 sharpness_rho
 
 # 신규 실험 로그 한 줄 형식
 #   [S2-seed42_sam0.05_d20|decay ] Ep [41/60] | 49.1s | Loss 0.31 | Train 88.97% |
@@ -142,8 +143,10 @@ def fig_trajectories(runs, plt):
 
 
 def fig_metric_problem(rows, runs, plt):
-    """측정식 문제 — 단측 sharpness 의 1차항이 grad norm 이다."""
-    if not rows or rows[0]['pg'] is None:
+    """측정식 문제 — 단측 sharpness 의 1차항이 grad norm 이다.
+    pg(probe grad norm)가 기록된 arm 만 쓴다. seed 42 는 pg 추가 이전이라 제외된다."""
+    rows = [r for r in rows if r['pg'] is not None]
+    if len(rows) < 2:
         return None
     fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
 
@@ -159,15 +162,24 @@ def fig_metric_problem(rows, runs, plt):
     ax[0].set_title('One-sided sharpness is mostly gradient norm')
     ax[0].legend(fontsize=8); ax[0].grid(alpha=.3, axis='y')
 
-    # (b) 1차항이 이론값 rho*|g| 와 맞는가
-    pred = [0.05 * r['pg'] for r in rows]
+    # (b) 1차항이 이론값 rho*|g| 를 따라가는가
+    # 점들이 y=x 아래에 놓이는 것은 정상이다. 테일러 전개는 rho→0 근사인데
+    # rho=0.05 는 무한소가 아니어서 고차항이 남는다. 관심사는 기울기 1 이 아니라
+    # "1차항이 |g| 에 선형으로 붙어 있는가" 이므로 상관계수를 함께 표시한다.
+    pred = [RHO_PROBE * r['pg'] for r in rows]
     ax[1].scatter(pred, first, s=55, color='#d62728', zorder=3)
     lim = [0, max(max(pred), max(first)) * 1.1]
-    ax[1].plot(lim, lim, '--', color='#888', lw=1, label='y = x')
-    ax[1].set_xlabel('$\\rho \\cdot \\|g\\|$  (theory)')
+    ax[1].plot(lim, lim, '--', color='#888', lw=1, label='y = x  (exact 1st order)')
+    if len(rows) >= 3:
+        mp, mf = st.mean(pred), st.mean(first)
+        sp = sum((a-mp)**2 for a in pred)**.5; sf = sum((b-mf)**2 for b in first)**.5
+        r = sum((a-mp)*(b-mf) for a, b in zip(pred, first))/(sp*sf) if sp and sf else float('nan')
+        ax[1].annotate(f'r = {r:+.3f}', xy=(.05, .88), xycoords='axes fraction', fontsize=10)
+    ax[1].set_xlabel('$\\rho \\cdot \\|g\\|$  (first-order prediction)')
     ax[1].set_ylabel('one-sided $-$ symmetric  (measured)')
-    ax[1].set_title('First-order term matches theory')
-    ax[1].legend(fontsize=8); ax[1].grid(alpha=.3)
+    ax[1].set_title('Measured first-order term tracks $\\rho\\|g\\|$\n(below $y{=}x$: higher-order terms at $\\rho{=}0.05$)',
+                    fontsize=10)
+    ax[1].legend(fontsize=8, loc='lower right'); ax[1].grid(alpha=.3)
     plt.tight_layout()
     return save(fig, 'fig3_metric_decomposition', plt)
 
