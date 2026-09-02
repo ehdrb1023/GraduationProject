@@ -93,7 +93,7 @@ def fig_rho_sweep(rows, plt):
         return None
     n = len(by[rhos[0]]['sym'])
 
-    fig, ax = plt.subplots(1, 2, figsize=(11, 4.2))
+    fig, ax = plt.subplots(1, 3, figsize=(15, 4.2))
     ax[0].errorbar(rhos, [st.mean(by[r]['sym']) for r in rhos],
                    yerr=[sd(by[r]['sym']) for r in rhos],
                    marker='o', ms=7, capsize=5, lw=2, color='#7048b6')
@@ -107,6 +107,24 @@ def fig_rho_sweep(rows, plt):
     ax[1].set_xlabel('SAM radius  $\\rho$'); ax[1].set_ylabel('Test accuracy (%)')
     ax[1].set_title('Generalization — does it follow?')
     ax[1].grid(alpha=.3)
+
+    # (c) 같은 축에서 상대 변화로 비교한다.
+    # 왼쪽 두 패널은 축 범위가 달라 "곡률 4.5배 감소 vs 정확도 0.3% 변화" 라는
+    # 크기 차이가 보이지 않는다. sam_off 기준 % 변화로 겹쳐 그리면 그게 드러난다.
+    base_s, base_a = st.mean(by[0.0]['sym']), st.mean(by[0.0]['acc'])
+    rel_s = [(st.mean(by[r]['sym']) / base_s - 1) * 100 for r in rhos]
+    rel_a = [(st.mean(by[r]['acc']) / base_a - 1) * 100 for r in rhos]
+    ax[2].plot(rhos, rel_s, 'o-', ms=7, lw=2, color='#7048b6', label='curvature')
+    ax[2].plot(rhos, rel_a, 's-', ms=7, lw=2, color='#1f77b4', label='test accuracy')
+    ax[2].axhline(0, color='k', lw=.8)
+    ax[2].set_xlabel('SAM radius  $\\rho$')
+    ax[2].set_ylabel('change vs $\\rho{=}0$  (%)')
+    ax[2].set_title('Same axis: the gap is the point')
+    ax[2].legend(fontsize=9); ax[2].grid(alpha=.3)
+    ax[2].annotate(f'{rel_s[-1]:+.0f}%', xy=(rhos[-1], rel_s[-1]), fontsize=10,
+                   color='#7048b6', xytext=(-38, 6), textcoords='offset points')
+    ax[2].annotate(f'{rel_a[-1]:+.2f}%', xy=(rhos[-1], rel_a[-1]), fontsize=10,
+                   color='#1f77b4', xytext=(-38, 8), textcoords='offset points')
 
     fig.suptitle(f'Decay-phase SAM: $\\rho$ sweep  (n={n} seed{"s" if n>1 else ""})',
                  fontsize=12)

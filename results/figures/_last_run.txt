@@ -1,4 +1,4 @@
-신규 실험 arm 8개 / 아카이브 CSV 26개
+신규 실험 arm 12개 / 아카이브 CSV 26개
 
 최종 표
  seed    rho     acc      one        sym     |g|
@@ -10,10 +10,15 @@
    43   0.02   87.35   0.1326   0.051208   2.061
    43   0.05   87.27   0.1041   0.038754   1.302
    43   0.10   87.55   0.0762   0.021537   1.153
+   44   0.00   87.50   0.1837   0.084686   2.529
+   44   0.02   87.45   0.1595   0.059989   2.175
+   44   0.05   87.97   0.1183   0.039168   1.716
+   44   0.10   87.54   0.0854   0.023652   1.281
 
 그림 생성
    results/figures/fig1_rho_sweep.png
    results/figures/fig2_decay_trajectories.png
+   results/figures/fig3_metric_decomposition.png
    results/figures/fig4_detrended_correlation.png
 
-3개 생성 → results/figures/
+4개 생성 → results/figures/
