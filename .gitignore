@@ -1,0 +1,15 @@
+# 실험 산출물 — 전부 생성물이므로 커밋하지 않는다.
+#   parsed/  : scripts/parse_notebook_logs.py 로 언제든 재생성 (노트북이 원본)
+#   phase0/  : 0_analysis.ipynb 산출물
+#   *.pt     : 체크포인트, 용량이 크다
+results/parsed/
+results/phase0/
+results/**/*.pt
+results/**/*.pth
+results/**/*.tgz
+results/**/*.zip
+
+# 파이썬
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
