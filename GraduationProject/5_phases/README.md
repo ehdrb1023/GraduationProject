@@ -14,6 +14,12 @@
 | `1_wsd_grid.ipynb` | 16 | **★ 메인 그리드** + Gate A/B/C 판정 | T4 |
 | `2_vit.ipynb` | 13 | ViT-Tiny 사전학습 → 파인튜닝 → 분기 | T4 |
 | `3_muon.ipynb` | 12 | Muon + SAM 짝 비교 | T4 |
+| `ALL_phases.ipynb` | 52 | **위 4개를 합친 통합본** — 외부에 통째로 붙여넣어 질문할 때 | — |
+
+`ALL_phases.ipynb` 는 `scripts/merge_notebooks.py` 가 생성한다. **직접 고치지 말 것.**
+원본을 고친 뒤 스크립트를 다시 돌리면 갱신된다.
+실제 실행은 원본 4개를 따로 쓰는 편이 낫다 — Colab 세션이 약 80분마다 끊기므로
+한 파일을 통째로 돌리면 중간에 잘린다.
 
 ## 실행 순서
 
