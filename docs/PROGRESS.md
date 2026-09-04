@@ -648,3 +648,83 @@ GPU 사용 한도로 보인다. 소실된 VM 이 고아로 남아 `TooManyAssign
 이 제약은 **Phase 2(ViT) 계획에도 영향**을 준다. Stage P 사전학습 36분 +
 시드당 30분이면 세션 하나에 겨우 들어가므로, 사전학습 체크포인트를 반드시
 회수해 다음 세션에서 재사용해야 한다.
+
+---
+
+## 13. 중단 시점 정리 (2026-09-03 09:40)
+
+Colab GPU 할당이 `Service Unavailable` 로 30분 이상 막혀 **전 작업을 중단했다.**
+백그라운드 프로세스·모니터·세션 전부 종료 확인.
+
+### 13.1 확보 데이터 — 완주 arm 14개
+
+| seed | arm | 비고 |
+|---|---|---|
+| 42 | 4/4 | 완료 |
+| 43 | 4/4 | 완료 (에폭별 `pg` 기록 시작) |
+| 44 | 4/4 | 완료 |
+| 45 | **2/4** | samoff·ρ0.02 만. ρ0.05 진행 중 노트북 배터리 소진(09-02 22:18) |
+| 46 | 0/4 | 미시작 |
+
+원본 로그: `results/grid/seed4[2-5]_run_log.txt`
+로그에 `gn`(학습 grad norm)·`pg`(probe grad norm)가 포함되어 **JSON 없이도 전부 재분석 가능**.
+
+### 13.2 결과 (sam_off 대비 paired)
+
+| ρ | n | 곡률 감소 | p | 정확도 증가 | p | Δacc |
+|---|---|---|---|---|---|---|
+| 0.02 | 4 | **4/4** | 0.062 | 1/4 | 0.938 | +0.02 %p |
+| 0.05 | 3 | **3/3** | 0.125 | 1/3 | 0.875 | +0.09 %p |
+| 0.10 | 3 | **3/3** | 0.125 | **3/3** | 0.125 | +0.26 %p |
+
+**확정에 가까운 것**
+곡률 감소는 10/10 arm 에서 예외 없다. 평균이 ρ 에 완벽히 단조
+(0.088 → 0.053 → 0.035 → 0.020), 표준편차도 작다. 5시드를 채우면 p=0.031 이 거의 확실하다.
+
+**아직 미정**
+ρ=0.10 의 정확도 개선이 3/3 이지만 p=0.125 로 유의하지 않다.
+5/5 가 되면 p=0.031. **seed 45(2 arm)·46(4 arm) = 6 arm 이 남았다.**
+
+### 13.3 남은 작업
+
+```
+1. seed 45 ρ0.05·ρ0.10   (Stage 1 부터 재실행 — 체크포인트가 죽은 VM 과 함께 소실)
+2. seed 46 4 arm
+   → 합계 약 2.5시간. GPU 확보되면 scripts/overnight_grid.sh 그대로 재개
+3. Gate B/C 최종 판정
+4. Phase 2 (ViT) / Phase 3 (Muon)
+```
+
+`scripts/overnight_grid.sh` 는 완주 arm 수로 완료를 판정하므로,
+GPU 가 풀리면 그대로 실행하면 seed 45 부터 이어간다.
+
+### 13.4 GPU 차단 상황
+
+```
+09-02  누적 GPU 사용 약 5시간 (스모크 + seed 42~45)
+       세션당 약 80분 후 404/401 로 회수되는 패턴 반복
+09-03  09:05~09:40  colab new --gpu T4 → Service Unavailable 지속
+```
+
+어제의 `TooManyAssignmentsError`(고아 VM 점유)와는 다른 에러다.
+Colab 가용량 부족이거나 계정 GPU 쿼터 소진으로 보인다. 보통 하루 단위로 리셋된다.
+
+**대안**: Kaggle (주 30h GPU 무료). `5_phases/*.ipynb` 를 그대로 올리면 된다.
+단 `/kaggle/working` 도 임시이므로 회수 절차는 동일하게 필요하다 (§8).
+
+### 13.5 산출물
+
+```
+results/grid/       시드별 원본 로그 (재분석의 유일한 원본)
+results/figures/    발표용 그림 5장
+  fig5_project_narrative   발표 도입 — 왜 방향을 바꿨나
+  fig1_rho_sweep           메인 — 곡률 −78 % vs 정확도 +0.30 %
+  fig3_metric_decomposition 방법론 — 기존 지표가 grad norm 이었음
+  fig2_decay_trajectories  에폭별 궤적
+  fig4_detrended_correlation 겉보기 상관이 시간 추세였음
+scripts/
+  make_figures.py          로그 → 그림 (JSON 불필요)
+  gate_a_within_arm.py     Gate A 사후 분석
+  overnight_grid.sh        시드 순차 실행 + 세션 재확보
+  parse_notebook_logs.py   아카이브 노트북 → CSV
+```

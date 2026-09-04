@@ -10,9 +10,9 @@
 export PATH="$HOME/.local/bin:$PATH"
 cd /home/martin1023/Graduation_project || exit 1
 
-SESSION=wsd_night
+SESSION=wsd_d2
 LOGDIR=results/grid
-SEEDS="44 45 46"
+SEEDS="45 46"
 MAX_RETRY=2
 mkdir -p "$LOGDIR" results/figures
 
@@ -23,6 +23,16 @@ count_epochs() {
   [ -f "$f" ] || { echo 0; return; }
   local n
   n=$(grep -c "Ep \[" "$f" 2>/dev/null) || n=0
+  echo "${n:-0}"
+}
+
+# 완주한 arm 수. "에폭 줄 수"로 판정하면 중간에 끊긴 시드를 완료로 오판한다
+# (seed 45 가 91에폭 = arm 2개만 완주한 채 끊겼는데 50줄 기준을 넘었다).
+count_done_arms() {
+  local f="$1"
+  [ -f "$f" ] || { echo 0; return; }
+  local n
+  n=$(grep "Ep \[60/60\]" "$f" 2>/dev/null | grep -c "S2-") || n=0
   echo "${n:-0}"
 }
 
@@ -69,8 +79,8 @@ PY
 for SEED in $SEEDS; do
   LOG="$LOGDIR/seed${SEED}_run_log.txt"
 
-  if [ "$(count_epochs "$LOG")" -ge 50 ]; then
-    echo "[$(date +%H:%M)] seed $SEED 이미 완료 — 건너뜀"
+  if [ "$(count_done_arms "$LOG")" -ge 4 ]; then
+    echo "[$(date +%H:%M)] seed $SEED 이미 완료 (arm 4개) — 건너뜀"
     continue
   fi
 
@@ -87,10 +97,10 @@ for SEED in $SEEDS; do
     echo "[$(date +%H:%M)] seed $SEED 실행 (시도 $attempt)"
     colab exec -s "$SESSION" -f "/tmp/grid_seed${SEED}.ipynb" --timeout 25000 > "$LOG" 2>&1
 
-    N=$(count_epochs "$LOG")
-    echo "[$(date +%H:%M)] seed $SEED 종료 — 에폭 $N 줄"
+    N=$(count_epochs "$LOG"); A=$(count_done_arms "$LOG")
+    echo "[$(date +%H:%M)] seed $SEED 종료 — 에폭 $N 줄 / 완주 arm $A 개"
 
-    if [ "$N" -ge 50 ]; then
+    if [ "$A" -ge 4 ]; then
       colab download -s "$SESSION" /content/out/phase1_results.tar.gz \
           "$LOGDIR/seed${SEED}_results.tar.gz" >/dev/null 2>&1
       cp "/tmp/grid_seed${SEED}_output.ipynb" "$LOGDIR/" 2>/dev/null

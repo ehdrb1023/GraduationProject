@@ -1,0 +1,259 @@
+[colab] Parsing notebook '/tmp/grid_seed44.ipynb'...
+[colab] Executing cell 1/15 - 187383b6-8271-47e5-969f-8345b80b69a8...
+device : cuda (Tesla T4)
+torch  : 2.11.0+cu128
+출력   : /content/out
+[colab] Executing cell 2/15 - 4e0c465b-e572-4b48-a3c3-81406b791a4c...
+시드 유틸 준비 완료
+[colab] Executing cell 3/15 - fd496d0c-7b23-4347-808c-ba0812229517...
+데이터 함수 준비 완료
+[colab] Executing cell 4/15 - 5deb195b-fa76-4b96-a67d-b6d9ce854d37...
+Lion / SAMAscent / ResNet-18 준비 완료
+[colab] Executing cell 5/15 - 06e7ca28-31fd-47e5-965c-63c2c02f2703...
+스케줄 / sharpness / 평가 함수 준비 완료
+[colab] Executing cell 6/15 - aee2b20a-e510-4839-8ec1-7e354df8a64c...
+그래프 훅 준비 완료 — 기본 꺼짐. 켜려면 LIVE["on"] = True
+[colab] Executing cell 7/15 - 129cbbe4-28c8-43bc-a89c-5cd298dc75ff...
+학습 루프 준비 완료
+[colab] Executing cell 8/15 - 3fb5f86e-cd6f-482c-9737-342f6c615715...
+Stage 함수 준비 완료
+[colab] Executing cell 9/15 - 6bd8af7f-a4d3-4263-aba7-bd983ba859a3...
+게이트 함수 준비 완료
+[colab] Executing cell 10/15 - ce818c08-927d-42fb-8914-6886cd573c99...
+arm 4개 | 예상 66분 (1.1시간)
+[colab] Executing cell 11/15 - d6a9ee55-626c-479b-961b-a0f4b3a8a0c3...
+CIFAR-10 다운로드 중...
+압축 해제 중...
+
+=== Stage 1 (seed 44) — 40 epochs ===
+
+[S1-s44|warmup] Ep [1/60] | 30.7s | Loss 1.6158 | Train 40.91% | Test 54.84% | lr 0.00007 | rho 0.0000 | gn 8.614
+[S1-s44|warmup] Ep [2/60] | 30.9s | Loss 1.1927 | Train 57.29% | Test 63.98% | lr 0.00013 | rho 0.0000 | gn 6.053 | Sharp1 0.9837 | SharpSym 0.532384 | pg 11.5850
+[S1-s44|warmup] Ep [3/60] | 29.7s | Loss 1.0029 | Train 64.58% | Test 67.30% | lr 0.00020 | rho 0.0000 | gn 5.857
+[S1-s44|stable] Ep [4/60] | 29.6s | Loss 0.8784 | Train 69.25% | Test 71.70% | lr 0.00020 | rho 0.0000 | gn 5.018 | Sharp1 0.5448 | SharpSym 0.306428 | pg 6.7715
+[S1-s44|stable] Ep [5/60] | 30.6s | Loss 0.7885 | Train 72.23% | Test 73.42% | lr 0.00020 | rho 0.0000 | gn 4.670
+[S1-s44|stable] Ep [6/60] | 29.9s | Loss 0.7341 | Train 74.48% | Test 74.35% | lr 0.00020 | rho 0.0000 | gn 4.220 | Sharp1 0.5535 | SharpSym 0.253373 | pg 7.1212
+[S1-s44|stable] Ep [7/60] | 30.4s | Loss 0.6852 | Train 76.05% | Test 76.52% | lr 0.00020 | rho 0.0000 | gn 3.858
+[S1-s44|stable] Ep [8/60] | 31.7s | Loss 0.6499 | Train 77.57% | Test 76.99% | lr 0.00020 | rho 0.0000 | gn 3.744 | Sharp1 0.5670 | SharpSym 0.300360 | pg 6.6597
+[S1-s44|stable] Ep [9/60] | 31.2s | Loss 0.6211 | Train 78.38% | Test 78.59% | lr 0.00020 | rho 0.0000 | gn 3.577
+[S1-s44|stable] Ep [10/60] | 30.2s | Loss 0.5907 | Train 79.54% | Test 79.36% | lr 0.00020 | rho 0.0000 | gn 3.573 | Sharp1 0.2731 | SharpSym 0.127390 | pg 4.0668
+[S1-s44|stable] Ep [11/60] | 30.6s | Loss 0.5592 | Train 80.63% | Test 79.64% | lr 0.00020 | rho 0.0000 | gn 3.379
+[S1-s44|stable] Ep [12/60] | 31.5s | Loss 0.5422 | Train 81.21% | Test 80.30% | lr 0.00020 | rho 0.0000 | gn 3.284 | Sharp1 0.3158 | SharpSym 0.133959 | pg 3.9986
+[S1-s44|stable] Ep [13/60] | 30.8s | Loss 0.5274 | Train 81.93% | Test 80.11% | lr 0.00020 | rho 0.0000 | gn 3.190
+[S1-s44|stable] Ep [14/60] | 29.5s | Loss 0.5111 | Train 82.25% | Test 80.59% | lr 0.00020 | rho 0.0000 | gn 3.192 | Sharp1 0.2554 | SharpSym 0.104790 | pg 3.9524
+[S1-s44|stable] Ep [15/60] | 30.8s | Loss 0.4896 | Train 83.07% | Test 80.91% | lr 0.00020 | rho 0.0000 | gn 3.108
+[S1-s44|stable] Ep [16/60] | 30.3s | Loss 0.4810 | Train 83.21% | Test 81.03% | lr 0.00020 | rho 0.0000 | gn 3.085 | Sharp1 0.3476 | SharpSym 0.160331 | pg 4.3704
+[S1-s44|stable] Ep [17/60] | 30.6s | Loss 0.4659 | Train 83.85% | Test 82.52% | lr 0.00020 | rho 0.0000 | gn 2.959
+[S1-s44|stable] Ep [18/60] | 32.2s | Loss 0.4538 | Train 84.21% | Test 81.95% | lr 0.00020 | rho 0.0000 | gn 3.027 | Sharp1 0.2772 | SharpSym 0.118368 | pg 3.8527
+[S1-s44|stable] Ep [19/60] | 30.6s | Loss 0.4425 | Train 84.65% | Test 81.85% | lr 0.00020 | rho 0.0000 | gn 2.952
+[S1-s44|stable] Ep [20/60] | 30.0s | Loss 0.4338 | Train 84.95% | Test 82.00% | lr 0.00020 | rho 0.0000 | gn 2.976 | Sharp1 0.1800 | SharpSym 0.058469 | pg 2.5601
+[S1-s44|stable] Ep [21/60] | 31.2s | Loss 0.4218 | Train 85.27% | Test 82.54% | lr 0.00020 | rho 0.0000 | gn 2.910
+[S1-s44|stable] Ep [22/60] | 29.7s | Loss 0.4189 | Train 85.33% | Test 82.64% | lr 0.00020 | rho 0.0000 | gn 2.978 | Sharp1 0.2216 | SharpSym 0.069731 | pg 3.2259
+[S1-s44|stable] Ep [23/60] | 29.5s | Loss 0.4115 | Train 85.53% | Test 82.10% | lr 0.00020 | rho 0.0000 | gn 2.933
+[S1-s44|stable] Ep [24/60] | 30.8s | Loss 0.4013 | Train 86.01% | Test 82.54% | lr 0.00020 | rho 0.0000 | gn 2.977 | Sharp1 0.2539 | SharpSym 0.094588 | pg 3.9394
+[S1-s44|stable] Ep [25/60] | 31.2s | Loss 0.3974 | Train 86.20% | Test 83.28% | lr 0.00020 | rho 0.0000 | gn 2.891
+[S1-s44|stable] Ep [26/60] | 30.3s | Loss 0.3901 | Train 86.49% | Test 83.22% | lr 0.00020 | rho 0.0000 | gn 2.889 | Sharp1 0.2323 | SharpSym 0.089790 | pg 3.6709
+[S1-s44|stable] Ep [27/60] | 31.6s | Loss 0.3804 | Train 86.64% | Test 82.92% | lr 0.00020 | rho 0.0000 | gn 2.929
+[S1-s44|stable] Ep [28/60] | 30.2s | Loss 0.3798 | Train 86.85% | Test 83.23% | lr 0.00020 | rho 0.0000 | gn 2.970 | Sharp1 0.2698 | SharpSym 0.109809 | pg 4.0081
+[S1-s44|stable] Ep [29/60] | 29.9s | Loss 0.3668 | Train 87.21% | Test 83.31% | lr 0.00020 | rho 0.0000 | gn 2.881
+[S1-s44|stable] Ep [30/60] | 31.1s | Loss 0.3677 | Train 87.18% | Test 83.41% | lr 0.00020 | rho 0.0000 | gn 2.861 | Sharp1 0.2790 | SharpSym 0.106647 | pg 3.8852
+[S1-s44|stable] Ep [31/60] | 30.5s | Loss 0.3626 | Train 87.37% | Test 82.89% | lr 0.00020 | rho 0.0000 | gn 2.843
+[S1-s44|stable] Ep [32/60] | 29.7s | Loss 0.3572 | Train 87.44% | Test 83.27% | lr 0.00020 | rho 0.0000 | gn 2.909 | Sharp1 0.2203 | SharpSym 0.084697 | pg 3.1780
+[S1-s44|stable] Ep [33/60] | 31.5s | Loss 0.3505 | Train 87.77% | Test 83.67% | lr 0.00020 | rho 0.0000 | gn 2.915
+[S1-s44|stable] Ep [34/60] | 30.7s | Loss 0.3494 | Train 87.80% | Test 83.97% | lr 0.00020 | rho 0.0000 | gn 2.917 | Sharp1 0.2012 | SharpSym 0.077049 | pg 2.9131
+[S1-s44|stable] Ep [35/60] | 29.8s | Loss 0.3416 | Train 88.13% | Test 84.16% | lr 0.00020 | rho 0.0000 | gn 2.819
+[S1-s44|stable] Ep [36/60] | 30.7s | Loss 0.3415 | Train 88.08% | Test 84.21% | lr 0.00020 | rho 0.0000 | gn 2.957 | Sharp1 0.2313 | SharpSym 0.075697 | pg 3.5150
+[S1-s44|stable] Ep [37/60] | 29.5s | Loss 0.3360 | Train 88.25% | Test 83.63% | lr 0.00020 | rho 0.0000 | gn 2.929
+[S1-s44|stable] Ep [38/60] | 29.6s | Loss 0.3380 | Train 88.04% | Test 84.22% | lr 0.00020 | rho 0.0000 | gn 2.907 | Sharp1 0.3026 | SharpSym 0.137040 | pg 3.8789
+[S1-s44|stable] Ep [39/60] | 30.6s | Loss 0.3349 | Train 88.31% | Test 84.15% | lr 0.00020 | rho 0.0000 | gn 2.877
+[S1-s44|stable] Ep [40/60] | 29.6s | Loss 0.3293 | Train 88.52% | Test 84.26% | lr 0.00020 | rho 0.0000 | gn 2.939 | Sharp1 0.2782 | SharpSym 0.097534 | pg 3.8681
+
+Stage 1 저장: /content/out/stage1_seed44.pt
+
+=== Stage 2 [seed44_samoff_d20] — 출발점 ep40: Test 84.26% | SharpSym 0.097534 ===
+
+[S2-seed44_samoff_d20|decay ] Ep [41/60] | 29.1s | Loss 0.3189 | Train 88.88% | Test 84.52% | lr 0.00019 | rho 0.0000 | gn 2.948
+[S2-seed44_samoff_d20|decay ] Ep [42/60] | 29.8s | Loss 0.3107 | Train 88.94% | Test 84.70% | lr 0.00018 | rho 0.0000 | gn 2.983 | Sharp1 0.2181 | SharpSym 0.076710 | pg 3.3348
+[S2-seed44_samoff_d20|decay ] Ep [43/60] | 29.6s | Loss 0.2997 | Train 89.48% | Test 84.85% | lr 0.00017 | rho 0.0000 | gn 2.956
+[S2-seed44_samoff_d20|decay ] Ep [44/60] | 30.1s | Loss 0.2877 | Train 89.80% | Test 85.18% | lr 0.00016 | rho 0.0000 | gn 2.979 | Sharp1 0.2547 | SharpSym 0.096607 | pg 3.9295
+[S2-seed44_samoff_d20|decay ] Ep [45/60] | 29.4s | Loss 0.2696 | Train 90.44% | Test 85.19% | lr 0.00015 | rho 0.0000 | gn 3.076
+[S2-seed44_samoff_d20|decay ] Ep [46/60] | 29.5s | Loss 0.2635 | Train 90.66% | Test 85.13% | lr 0.00014 | rho 0.0000 | gn 3.073 | Sharp1 0.2619 | SharpSym 0.097616 | pg 3.8625
+[S2-seed44_samoff_d20|decay ] Ep [47/60] | 30.3s | Loss 0.2523 | Train 91.11% | Test 85.86% | lr 0.00013 | rho 0.0000 | gn 3.102
+[S2-seed44_samoff_d20|decay ] Ep [48/60] | 29.5s | Loss 0.2408 | Train 91.57% | Test 85.11% | lr 0.00012 | rho 0.0000 | gn 3.068 | Sharp1 0.2704 | SharpSym 0.103262 | pg 3.5630
+[S2-seed44_samoff_d20|decay ] Ep [49/60] | 29.7s | Loss 0.2220 | Train 92.19% | Test 86.02% | lr 0.00011 | rho 0.0000 | gn 3.118
+[S2-seed44_samoff_d20|decay ] Ep [50/60] | 30.5s | Loss 0.2125 | Train 92.48% | Test 85.74% | lr 0.00010 | rho 0.0000 | gn 3.201 | Sharp1 0.2017 | SharpSym 0.067660 | pg 3.0936
+[S2-seed44_samoff_d20|decay ] Ep [51/60] | 29.2s | Loss 0.1969 | Train 93.02% | Test 85.95% | lr 0.00009 | rho 0.0000 | gn 3.225
+[S2-seed44_samoff_d20|decay ] Ep [52/60] | 30.3s | Loss 0.1861 | Train 93.31% | Test 86.18% | lr 0.00008 | rho 0.0000 | gn 3.204 | Sharp1 0.2482 | SharpSym 0.099983 | pg 3.5135
+[S2-seed44_samoff_d20|decay ] Ep [53/60] | 29.5s | Loss 0.1682 | Train 94.16% | Test 86.04% | lr 0.00007 | rho 0.0000 | gn 3.222
+[S2-seed44_samoff_d20|decay ] Ep [54/60] | 29.6s | Loss 0.1579 | Train 94.47% | Test 86.35% | lr 0.00006 | rho 0.0000 | gn 3.241 | Sharp1 0.2320 | SharpSym 0.094871 | pg 3.1989
+[S2-seed44_samoff_d20|decay ] Ep [55/60] | 30.5s | Loss 0.1461 | Train 94.74% | Test 86.79% | lr 0.00005 | rho 0.0000 | gn 3.221
+[S2-seed44_samoff_d20|decay ] Ep [56/60] | 29.5s | Loss 0.1322 | Train 95.38% | Test 86.89% | lr 0.00004 | rho 0.0000 | gn 3.193 | Sharp1 0.2126 | SharpSym 0.099385 | pg 2.9673
+[S2-seed44_samoff_d20|decay ] Ep [57/60] | 29.7s | Loss 0.1175 | Train 95.84% | Test 87.25% | lr 0.00003 | rho 0.0000 | gn 3.114
+[S2-seed44_samoff_d20|decay ] Ep [58/60] | 30.3s | Loss 0.1062 | Train 96.23% | Test 87.43% | lr 0.00002 | rho 0.0000 | gn 3.052 | Sharp1 0.1741 | SharpSym 0.083424 | pg 2.4730
+[S2-seed44_samoff_d20|decay ] Ep [59/60] | 29.1s | Loss 0.0948 | Train 96.70% | Test 87.38% | lr 0.00001 | rho 0.0000 | gn 2.921
+[S2-seed44_samoff_d20|decay ] Ep [60/60] | 31.2s | Loss 0.0873 | Train 96.94% | Test 87.50% | lr 0.00000 | rho 0.0000 | gn 2.864 | Sharp1 0.1837 | SharpSym 0.084686 | pg 2.5290
+
+=== [seed44_samoff_d20] 완료 ===
+  Test     84.26% -> 87.50% (+3.24%p)
+  SharpSym 0.097534 -> 0.084686
+  9.9분 | 저장: /content/out/arm_seed44_samoff_d20.json
+
+=== Stage 2 [seed44_sam0.02_d20] — 출발점 ep40: Test 84.26% | SharpSym 0.097534 ===
+
+[S2-seed44_sam0.02_d20|decay ] Ep [41/60] | 43.2s | Loss 0.3158 | Train 88.96% | Test 84.55% | lr 0.00019 | rho 0.0067 | gn 2.705
+[S2-seed44_sam0.02_d20|decay ] Ep [42/60] | 42.9s | Loss 0.3072 | Train 89.13% | Test 84.84% | lr 0.00018 | rho 0.0133 | gn 2.444 | Sharp1 0.1639 | SharpSym 0.044879 | pg 2.5121
+[S2-seed44_sam0.02_d20|decay ] Ep [43/60] | 43.0s | Loss 0.2919 | Train 89.88% | Test 85.12% | lr 0.00017 | rho 0.0200 | gn 2.243
+[S2-seed44_sam0.02_d20|decay ] Ep [44/60] | 43.3s | Loss 0.2793 | Train 90.16% | Test 85.81% | lr 0.00016 | rho 0.0200 | gn 2.176 | Sharp1 0.1767 | SharpSym 0.048916 | pg 2.6874
+[S2-seed44_sam0.02_d20|decay ] Ep [45/60] | 42.8s | Loss 0.2651 | Train 90.72% | Test 85.44% | lr 0.00015 | rho 0.0200 | gn 2.195
+[S2-seed44_sam0.02_d20|decay ] Ep [46/60] | 43.0s | Loss 0.2530 | Train 91.12% | Test 85.63% | lr 0.00014 | rho 0.0200 | gn 2.153 | Sharp1 0.2180 | SharpSym 0.076565 | pg 2.8401
+[S2-seed44_sam0.02_d20|decay ] Ep [47/60] | 43.4s | Loss 0.2414 | Train 91.56% | Test 86.13% | lr 0.00013 | rho 0.0200 | gn 2.157
+[S2-seed44_sam0.02_d20|decay ] Ep [48/60] | 42.9s | Loss 0.2297 | Train 91.90% | Test 85.32% | lr 0.00012 | rho 0.0200 | gn 2.144 | Sharp1 0.2070 | SharpSym 0.061800 | pg 3.0551
+[S2-seed44_sam0.02_d20|decay ] Ep [49/60] | 42.8s | Loss 0.2121 | Train 92.54% | Test 86.01% | lr 0.00011 | rho 0.0200 | gn 2.105
+[S2-seed44_sam0.02_d20|decay ] Ep [50/60] | 43.1s | Loss 0.2010 | Train 93.05% | Test 86.18% | lr 0.00010 | rho 0.0200 | gn 2.105 | Sharp1 0.1654 | SharpSym 0.050459 | pg 2.6128
+[S2-seed44_sam0.02_d20|decay ] Ep [51/60] | 42.8s | Loss 0.1891 | Train 93.30% | Test 86.70% | lr 0.00009 | rho 0.0200 | gn 2.093
+[S2-seed44_sam0.02_d20|decay ] Ep [52/60] | 43.0s | Loss 0.1778 | Train 93.82% | Test 86.39% | lr 0.00008 | rho 0.0200 | gn 2.093 | Sharp1 0.1641 | SharpSym 0.052152 | pg 2.3110
+[S2-seed44_sam0.02_d20|decay ] Ep [53/60] | 42.8s | Loss 0.1623 | Train 94.42% | Test 86.11% | lr 0.00007 | rho 0.0200 | gn 2.069
+[S2-seed44_sam0.02_d20|decay ] Ep [54/60] | 42.9s | Loss 0.1503 | Train 94.82% | Test 86.46% | lr 0.00006 | rho 0.0200 | gn 2.012 | Sharp1 0.1402 | SharpSym 0.045484 | pg 2.1586
+[S2-seed44_sam0.02_d20|decay ] Ep [55/60] | 43.2s | Loss 0.1374 | Train 95.27% | Test 86.89% | lr 0.00005 | rho 0.0200 | gn 1.963
+[S2-seed44_sam0.02_d20|decay ] Ep [56/60] | 42.9s | Loss 0.1274 | Train 95.63% | Test 86.88% | lr 0.00004 | rho 0.0200 | gn 1.966 | Sharp1 0.1505 | SharpSym 0.053954 | pg 1.9922
+[S2-seed44_sam0.02_d20|decay ] Ep [57/60] | 42.6s | Loss 0.1132 | Train 96.19% | Test 87.22% | lr 0.00003 | rho 0.0200 | gn 1.877
+[S2-seed44_sam0.02_d20|decay ] Ep [58/60] | 43.4s | Loss 0.1018 | Train 96.58% | Test 87.55% | lr 0.00002 | rho 0.0200 | gn 1.821 | Sharp1 0.1805 | SharpSym 0.069401 | pg 2.5929
+[S2-seed44_sam0.02_d20|decay ] Ep [59/60] | 42.9s | Loss 0.0943 | Train 96.87% | Test 87.37% | lr 0.00001 | rho 0.0200 | gn 1.757
+[S2-seed44_sam0.02_d20|decay ] Ep [60/60] | 43.1s | Loss 0.0878 | Train 97.15% | Test 87.45% | lr 0.00000 | rho 0.0200 | gn 1.698 | Sharp1 0.1595 | SharpSym 0.059989 | pg 2.1752
+
+=== [seed44_sam0.02_d20] 완료 ===
+  Test     84.26% -> 87.45% (+3.19%p)
+  SharpSym 0.097534 -> 0.059989
+  14.3분 | 저장: /content/out/arm_seed44_sam0.02_d20.json
+
+=== Stage 2 [seed44_sam0.05_d20] — 출발점 ep40: Test 84.26% | SharpSym 0.097534 ===
+
+[S2-seed44_sam0.05_d20|decay ] Ep [41/60] | 43.1s | Loss 0.3147 | Train 89.03% | Test 84.46% | lr 0.00019 | rho 0.0167 | gn 2.440
+[S2-seed44_sam0.05_d20|decay ] Ep [42/60] | 43.0s | Loss 0.3069 | Train 89.28% | Test 84.87% | lr 0.00018 | rho 0.0333 | gn 2.062 | Sharp1 0.1590 | SharpSym 0.045005 | pg 2.3850
+[S2-seed44_sam0.05_d20|decay ] Ep [43/60] | 42.8s | Loss 0.2925 | Train 89.96% | Test 85.06% | lr 0.00017 | rho 0.0500 | gn 1.777
+[S2-seed44_sam0.05_d20|decay ] Ep [44/60] | 43.1s | Loss 0.2824 | Train 90.32% | Test 85.67% | lr 0.00016 | rho 0.0500 | gn 1.715 | Sharp1 0.1374 | SharpSym 0.029069 | pg 2.3398
+[S2-seed44_sam0.05_d20|decay ] Ep [45/60] | 43.1s | Loss 0.2668 | Train 90.81% | Test 85.71% | lr 0.00015 | rho 0.0500 | gn 1.673
+[S2-seed44_sam0.05_d20|decay ] Ep [46/60] | 42.9s | Loss 0.2558 | Train 91.35% | Test 85.75% | lr 0.00014 | rho 0.0500 | gn 1.634 | Sharp1 0.1453 | SharpSym 0.045095 | pg 2.1014
+[S2-seed44_sam0.05_d20|decay ] Ep [47/60] | 43.3s | Loss 0.2403 | Train 91.86% | Test 85.97% | lr 0.00013 | rho 0.0500 | gn 1.620
+[S2-seed44_sam0.05_d20|decay ] Ep [48/60] | 43.0s | Loss 0.2299 | Train 92.21% | Test 86.22% | lr 0.00012 | rho 0.0500 | gn 1.593 | Sharp1 0.1269 | SharpSym 0.032135 | pg 1.9210
+[S2-seed44_sam0.05_d20|decay ] Ep [49/60] | 42.7s | Loss 0.2139 | Train 92.74% | Test 86.49% | lr 0.00011 | rho 0.0500 | gn 1.579
+[S2-seed44_sam0.05_d20|decay ] Ep [50/60] | 43.1s | Loss 0.2035 | Train 93.16% | Test 86.48% | lr 0.00010 | rho 0.0500 | gn 1.549 | Sharp1 0.1090 | SharpSym 0.027126 | pg 1.7632
+[S2-seed44_sam0.05_d20|decay ] Ep [51/60] | 43.5s | Loss 0.1910 | Train 93.59% | Test 87.02% | lr 0.00009 | rho 0.0500 | gn 1.545
+[S2-seed44_sam0.05_d20|decay ] Ep [52/60] | 42.9s | Loss 0.1817 | Train 93.97% | Test 86.26% | lr 0.00008 | rho 0.0500 | gn 1.520 | Sharp1 0.1198 | SharpSym 0.034494 | pg 1.8135
+[S2-seed44_sam0.05_d20|decay ] Ep [53/60] | 42.9s | Loss 0.1663 | Train 94.49% | Test 86.83% | lr 0.00007 | rho 0.0500 | gn 1.491
+[S2-seed44_sam0.05_d20|decay ] Ep [54/60] | 43.2s | Loss 0.1540 | Train 94.82% | Test 87.32% | lr 0.00006 | rho 0.0500 | gn 1.449 | Sharp1 0.1073 | SharpSym 0.028222 | pg 1.6862
+[S2-seed44_sam0.05_d20|decay ] Ep [55/60] | 42.8s | Loss 0.1435 | Train 95.32% | Test 87.58% | lr 0.00005 | rho 0.0500 | gn 1.425
+[S2-seed44_sam0.05_d20|decay ] Ep [56/60] | 43.0s | Loss 0.1330 | Train 95.74% | Test 87.47% | lr 0.00004 | rho 0.0500 | gn 1.389 | Sharp1 0.1111 | SharpSym 0.034875 | pg 1.6028
+[S2-seed44_sam0.05_d20|decay ] Ep [57/60] | 43.1s | Loss 0.1215 | Train 96.11% | Test 87.43% | lr 0.00003 | rho 0.0500 | gn 1.343
+[S2-seed44_sam0.05_d20|decay ] Ep [58/60] | 42.9s | Loss 0.1119 | Train 96.54% | Test 87.77% | lr 0.00002 | rho 0.0500 | gn 1.293 | Sharp1 0.1187 | SharpSym 0.037738 | pg 1.6954
+[S2-seed44_sam0.05_d20|decay ] Ep [59/60] | 43.0s | Loss 0.1048 | Train 96.85% | Test 87.82% | lr 0.00001 | rho 0.0500 | gn 1.254
+[S2-seed44_sam0.05_d20|decay ] Ep [60/60] | 43.3s | Loss 0.0991 | Train 97.03% | Test 87.97% | lr 0.00000 | rho 0.0500 | gn 1.223 | Sharp1 0.1183 | SharpSym 0.039168 | pg 1.7161
+
+=== [seed44_sam0.05_d20] 완료 ===
+  Test     84.26% -> 87.97% (+3.71%p)
+  SharpSym 0.097534 -> 0.039168
+  14.3분 | 저장: /content/out/arm_seed44_sam0.05_d20.json
+
+=== Stage 2 [seed44_sam0.1_d20] — 출발점 ep40: Test 84.26% | SharpSym 0.097534 ===
+
+[S2-seed44_sam0.1_d20|decay ] Ep [41/60] | 42.8s | Loss 0.3166 | Train 89.16% | Test 84.53% | lr 0.00019 | rho 0.0333 | gn 2.160
+[S2-seed44_sam0.1_d20|decay ] Ep [42/60] | 42.9s | Loss 0.3123 | Train 89.41% | Test 84.79% | lr 0.00018 | rho 0.0667 | gn 1.691 | Sharp1 0.1101 | SharpSym 0.020020 | pg 1.9245
+[S2-seed44_sam0.1_d20|decay ] Ep [43/60] | 43.1s | Loss 0.3028 | Train 89.99% | Test 85.40% | lr 0.00017 | rho 0.1000 | gn 1.413
+[S2-seed44_sam0.1_d20|decay ] Ep [44/60] | 42.6s | Loss 0.2946 | Train 90.25% | Test 85.86% | lr 0.00016 | rho 0.1000 | gn 1.332 | Sharp1 0.1022 | SharpSym 0.019166 | pg 1.7742
+[S2-seed44_sam0.1_d20|decay ] Ep [45/60] | 42.6s | Loss 0.2757 | Train 91.05% | Test 85.52% | lr 0.00015 | rho 0.1000 | gn 1.298
+[S2-seed44_sam0.1_d20|decay ] Ep [46/60] | 43.0s | Loss 0.2640 | Train 91.42% | Test 85.78% | lr 0.00014 | rho 0.1000 | gn 1.257 | Sharp1 0.1243 | SharpSym 0.036200 | pg 1.7405
+[S2-seed44_sam0.1_d20|decay ] Ep [47/60] | 42.8s | Loss 0.2512 | Train 91.81% | Test 86.16% | lr 0.00013 | rho 0.1000 | gn 1.245
+[S2-seed44_sam0.1_d20|decay ] Ep [48/60] | 42.9s | Loss 0.2400 | Train 92.28% | Test 86.00% | lr 0.00012 | rho 0.1000 | gn 1.218 | Sharp1 0.0892 | SharpSym 0.018060 | pg 1.4775
+[S2-seed44_sam0.1_d20|decay ] Ep [49/60] | 43.2s | Loss 0.2265 | Train 92.67% | Test 86.55% | lr 0.00011 | rho 0.1000 | gn 1.190
+[S2-seed44_sam0.1_d20|decay ] Ep [50/60] | 42.7s | Loss 0.2135 | Train 93.17% | Test 86.45% | lr 0.00010 | rho 0.1000 | gn 1.176 | Sharp1 0.1048 | SharpSym 0.025504 | pg 1.6405
+[S2-seed44_sam0.1_d20|decay ] Ep [51/60] | 42.7s | Loss 0.2037 | Train 93.56% | Test 86.99% | lr 0.00009 | rho 0.1000 | gn 1.166
+[S2-seed44_sam0.1_d20|decay ] Ep [52/60] | 42.9s | Loss 0.1915 | Train 93.91% | Test 86.77% | lr 0.00008 | rho 0.1000 | gn 1.137 | Sharp1 0.0859 | SharpSym 0.020356 | pg 1.3707
+[S2-seed44_sam0.1_d20|decay ] Ep [53/60] | 42.7s | Loss 0.1779 | Train 94.41% | Test 87.11% | lr 0.00007 | rho 0.1000 | gn 1.113
+[S2-seed44_sam0.1_d20|decay ] Ep [54/60] | 43.0s | Loss 0.1664 | Train 94.89% | Test 86.89% | lr 0.00006 | rho 0.1000 | gn 1.078 | Sharp1 0.0848 | SharpSym 0.021829 | pg 1.3512
+[S2-seed44_sam0.1_d20|decay ] Ep [55/60] | 43.0s | Loss 0.1569 | Train 95.28% | Test 87.09% | lr 0.00005 | rho 0.1000 | gn 1.072
+[S2-seed44_sam0.1_d20|decay ] Ep [56/60] | 42.6s | Loss 0.1484 | Train 95.47% | Test 87.22% | lr 0.00004 | rho 0.1000 | gn 1.046 | Sharp1 0.0782 | SharpSym 0.018828 | pg 1.2426
+[S2-seed44_sam0.1_d20|decay ] Ep [57/60] | 43.1s | Loss 0.1372 | Train 95.96% | Test 87.16% | lr 0.00003 | rho 0.1000 | gn 1.008
+[S2-seed44_sam0.1_d20|decay ] Ep [58/60] | 42.8s | Loss 0.1273 | Train 96.37% | Test 87.47% | lr 0.00002 | rho 0.1000 | gn 0.975 | Sharp1 0.0846 | SharpSym 0.022185 | pg 1.2803
+[S2-seed44_sam0.1_d20|decay ] Ep [59/60] | 42.7s | Loss 0.1215 | Train 96.60% | Test 87.56% | lr 0.00001 | rho 0.1000 | gn 0.957
+[S2-seed44_sam0.1_d20|decay ] Ep [60/60] | 43.3s | Loss 0.1167 | Train 96.76% | Test 87.54% | lr 0.00000 | rho 0.1000 | gn 0.926 | Sharp1 0.0854 | SharpSym 0.023652 | pg 1.2809
+
+=== [seed44_sam0.1_d20] 완료 ===
+  Test     84.26% -> 87.54% (+3.28%p)
+  SharpSym 0.097534 -> 0.023652
+  14.3분 | 저장: /content/out/arm_seed44_sam0.1_d20.json
+
+그리드 완료
+[colab] Executing cell 12/15 - 7c3bbbfa-e198-4824-ac6a-e96f85c3d3b6...
+ seed    rho    acc0    acc1      one         sym     |g|    min
+----------------------------------------------------------------
+   44   0.00   84.26   87.50   0.1837    0.084686   2.529    9.9
+   44   0.02   84.26   87.45   0.1595    0.059989   2.175   14.3
+   44   0.05   84.26   87.97   0.1183    0.039168   1.716   14.3
+   44   0.10   84.26   87.54   0.0854    0.023652   1.281   14.3
+----------------------------------------------------------------
+one = 단측 sharpness | sym = 대칭(곡률) | |g| = probe grad norm
+[colab] Executing cell 13/15 - 3c05c352-a31f-4b0b-b756-c6854f8736ab...
+====================================================================================
+Gate A — sharpness 지표가 곡률을 재고 있는가
+====================================================================================
+기준: 대칭/단측 비율 평균 ≥ 0.30 이고, 대칭이 |g| 와 완전상관(>0.95)이 아닐 것
+
+arm                                  one         sym      |g|  sym/one
+----------------------------------------------------------------------
+seed44_sam0.02_d20                0.1595    0.059989    2.175    0.376
+seed44_sam0.05_d20                0.1183    0.039168    1.716    0.331
+seed44_sam0.1_d20                 0.0854    0.023652    1.281    0.277
+seed44_samoff_d20                 0.1837    0.084686    2.529    0.461
+----------------------------------------------------------------------
+
+대칭/단측 비율 평균 : 0.361 (sd 0.078)
+(one−sym) ~ ρ|g|    : +0.960   ← 이론대로면 +1 근처
+sym ~ |g|           : +0.989   ← +1 근처면 곡률도 |g| 대리물
+
+▶ 실패 → 사전등록 대응: "기존 지표는 곡률이 아니라 grad norm 의 대리물이었다"로
+   프레이밍 전환. 방법론적 기여가 주 결과가 된다.
+
+====================================================================================
+Gate B — sharpness 감소가 시드에 걸쳐 일관적인가 (final_symmetric)
+====================================================================================
+기준: 5/5 → p=0.031 통과 | 4/5 → 경향만 기술 | 3/5 이하 → 발견 철회
+
+  seed          off           on       Δsharp     Δacc
+------------------------------------------------------
+    44     0.084686     0.039168    -0.045519    +0.47
+------------------------------------------------------
+
+sam_on 이 더 낮음: 1/1  부호검정 p = 0.5000
+Δsharpness -0.045519 ± nan
+Δaccuracy  +0.470 ± nan %p
+
+▶ 판정 불가 — 시드가 1개뿐이다. 부호검정은 5시드부터 p=0.031 이 된다.
+   (3시드 p=0.125, 4시드 p=0.0625 — 어느 쪽도 0.05 를 넘지 못한다)
+
+====================================================================================
+Gate C — rho 반응이 sharpness 와 accuracy 에서 갈리는가
+====================================================================================
+기준: sharpness 는 ρ에 단조 감소, accuracy 는 평평(변동폭 ≤ 2×시드 sd) → 통과
+
+   rho   n         sharp         ±sd       acc      ±sd
+-------------------------------------------------------
+  0.00   1      0.084686         nan     87.50      nan
+  0.02   1      0.059989         nan     87.45      nan
+  0.05   1      0.039168         nan     87.97      nan
+  0.10   1      0.023652         nan     87.54      nan
+-------------------------------------------------------
+
+sharpness ρ 단조 감소 : 예
+accuracy 변동폭       : 0.520 %p (시드 sd 최대 nan)
+
+▶ 부분 통과 (둘 다 단조) → "ρ에 비례해 이득" 실용 가이드로 전환
+
+[colab] Executing cell 14/15 - 123e77be-040d-4685-9683-1651a2d4419d...
+<Figure size 1100x400 with 2 Axes>
+
+[Image saved to: /tmp/tmpj6axk2aj.png]
+[colab] Executing cell 15/15 - f077bd5d-7dfa-426c-882b-9e05ec2fb1d5...
+/content/out/phase1_results.tar.gz  (80 KB)
+<IPython.core.display.Javascript object>
+<IPython.core.display.Javascript object>
+[colab] Saving notebook with outputs to '/tmp/grid_seed44_output.ipynb'...
