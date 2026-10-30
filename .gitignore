@@ -1,17 +1,13 @@
-# 실험 산출물 — 전부 생성물이므로 커밋하지 않는다.
-#   parsed/  : scripts/parse_notebook_logs.py 로 언제든 재생성 (노트북이 원본)
-#   phase0/  : 0_analysis.ipynb 산출물
-#   *.pt     : 체크포인트, 용량이 크다
-results/parsed/
-results/phase0/
-# grid/ 는 실측 원본이므로 커밋한다 (아카이브와 달리 재생성 불가)
-results/grid/*.tar.gz
-results/**/*.pt
-results/**/*.pth
-results/**/*.tgz
-results/**/*.zip
+# 모델 가중치·배열
+*.pt
+*.pth
+*.npy
+# 코드 묶음과 보고서는 저장소에 올리지 않는다
+*.zip
+report/
 
 # 파이썬
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+.venv/
