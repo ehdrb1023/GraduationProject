@@ -1,0 +1,13 @@
+# 모델 가중치·배열
+*.pt
+*.pth
+*.npy
+# 코드 묶음과 보고서는 저장소에 올리지 않는다
+*.zip
+report/
+
+# 파이썬
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/

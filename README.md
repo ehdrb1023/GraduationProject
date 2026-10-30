@@ -1,183 +1,184 @@
-# Decay-SAM: 사전학습 마지막 구간에만 SAM을 켜서 "덜 잊는" 언어모델 만들기
+# 졸업프로젝트 코드 정리 — Decay-Phase SAM on AdamW and Muon
 
-졸업 프로젝트 실험 저장소입니다.
+WSD 학습률 스케줄의 마지막 감쇠 구간(20%)에만 SAM을 켰을 때, 사전학습 성능과 파인튜닝 후 망각이 어떻게 달라지는지 AdamW(유클리드 SAM)와 Muon(스펙트럼 SAM)에서 비교한 실험 코드 모음입니다. 모든 실험은 Kaggle T4 GPU 1개로 돌렸습니다.
 
-**한 줄 요약**: 언어모델을 사전학습할 때 **마지막 20% 구간에만 SAM을 켜면**, 비용은 1.2배 정도만 늘고 나중에 다른 일(파이썬 코드)을 가르쳤을 때 원래 배운 것(영어)을 **20~27% 덜 잊습니다.** 이 효과는 AdamW와 Muon 두 옵티마이저에서 모두 나타났습니다.
-
----
-
-## 1. 쉽게 설명하면
-
-### 무슨 문제를 푸나?
-- 언어모델은 보통 **사전학습**(대량의 글로 기본기 학습) → **추가 학습**(코드, 수학 같은 특정 일 학습) 순서로 만듭니다.
-- 문제는 추가 학습을 하면 **원래 알던 것을 잊어버린다**는 점입니다 (catastrophic forgetting).
-
-### SAM이 뭔가?
-- 보통 학습은 "loss가 낮은 곳"을 찾아갑니다.
-- **SAM**(Sharpness-Aware Minimization)은 "loss가 낮으면서 **주변도 평평한 곳**"을 찾아갑니다. 가중치를 일부러 살짝 흔들어 보고, 흔들어도 loss가 별로 안 오르는 방향으로 업데이트합니다.
-- 평평한 곳에 있는 모델은 나중에 가중치가 좀 바뀌어도(=추가 학습) 원래 성능이 덜 무너집니다.
-- 단점: 매 step 계산을 두 번 해서 **학습 시간이 약 2배**입니다.
-
-### 우리 아이디어
-- 학습률 스케줄 WSD(워밍업 → 유지 → **마지막에 감쇠**)에서, 모델이 최종 위치에 "자리 잡는" 구간은 마지막 감쇠 구간입니다.
-- 그래서 **SAM을 마지막 20%에만** 켭니다 → 비용은 1.2~1.26배로 줄이고, 효과는 최대한 유지.
-
-### 옵티마이저는 왜 두 개?
-- **AdamW**: 지금 대부분의 LLM이 쓰는 표준 옵티마이저
-- **Muon**: 최근 주목받는 옵티마이저. 가중치 행렬 전체를 한꺼번에 보고(직교화) 업데이트해서 같은 step에서 더 잘 배움
-- 두 옵티마이저는 "거리"를 재는 방식(기하학)이 달라서, SAM의 흔드는 방식도 맞춰줘야 합니다
-  - AdamW → **유클리드 SAM** (원래 SAM)
-  - Muon → **스펙트럼 SAM** (행렬마다 직교화한 방향으로 흔듦, 2026년 7월 SpecSAM 논문 방식)
+- 최종 보고서: `report/Investigating_the_Effects_of_Decay-Phase_SAM_on_AdamW_and_Muon.pdf`
+- 모든 노트북은 실행 결과(출력)가 저장된 상태입니다. 다시 돌리지 않아도 숫자를 확인할 수 있습니다.
 
 ---
 
-## 2. 핵심 결과
-
-### 실험 구조
-1. BabyLM 영어 데이터(1,570만 토큰)로 사전학습 (10 epoch)
-2. 파이썬 코드로 추가 학습 1,000 step (약하게 / 강하게 두 가지)
-3. **망각** = 추가 학습 후 영어 검증 loss가 얼마나 올랐나
-   - 공정하게 비교하려고, 모든 모델이 **코드를 같은 만큼 배운 지점**에서 비교합니다 ("같은 지점 망각")
-
-### 결과표 (같은 지점 망각, 약한 / 강한 추가 학습)
-
-| 방법 | 사전학습 비용 | 사전학습 loss ↓ | 문법 점수(BLiMP) ↑ | 망각 ↓ | SAM 없음 대비 감소 |
-|---|---|---|---|---|---|
-| AdamW, SAM 없음 | 1.00배 | 3.288 | 67.1% | 0.643 / 1.409 | — |
-| **AdamW + 감쇠 구간 SAM (ρ 0.2)** | **1.21배** | 3.267 | 67.2% | **0.467 / 1.115** | **27% / 21%** |
-| Muon, SAM 없음 | 1.00배 | 3.380 | 66.2% | 0.862 / 1.571 | — |
-| **Muon + 감쇠 구간 스펙트럼 SAM (ρ 0.05)** | **1.26배** | **3.243** | **68.3%** | 0.626 / 1.196 | **27% / 24%** |
-| Muon + 전체 구간 스펙트럼 SAM (ρ 0.05) | 2.27배 | 3.273 | 68.3% | 0.618 / 1.274 | 28% / 19% |
-
-- 모든 비교에서 추가 학습 seed 3개 중 3개가 같은 방향
-- 새 태스크(코드)를 덜 배우는 손해는 없음 (감쇠 구간 SAM 기준)
-
-### 결론 4가지
-
-1. **감쇠 구간 SAM은 옵티마이저와 상관없이 통한다.** 흔드는 방식만 옵티마이저에 맞추면, AdamW와 Muon 모두 망각이 20~27% 줄고 비용은 1.2배 정도.
-2. **옵티마이저마다 얻는 게 다르다.**
-   - Muon + 스펙트럼: 사전학습 품질이 가장 좋음 (loss 가장 낮고 문법 점수 +2%p)
-   - AdamW + 유클리드: 망각 절대량이 가장 적고, 실제 학습 시간도 더 빠름
-3. **Muon에서는 감쇠 구간만으로 충분하다.** 전체 구간 SAM과 망각 보호는 비슷한데 시간은 약 절반. 오히려 사전학습 loss와 새 태스크 학습은 감쇠 구간 쪽이 더 좋음.
-4. **덜 잊는 이유는 "덜 움직여서"가 아니라 "평평한 방향으로 움직여서".** SAM 모델은 추가 학습 때 가중치를 오히려 **더 많이** 움직였는데도 덜 잊었습니다. 움직인 방향의 곡률이 약 1/4로 낮았기 때문입니다.
-
-### 다른 지표로 봐도 (Muon, 감쇠 구간 SAM vs SAM 없음)
-
-| 지표 | 뜻 | SAM 없음 | 감쇠 구간 SAM |
-|---|---|---|---|
-| BLiMP 문법 정확도 | 영어 문법 이해 | 66.2% | **68.3%** |
-| 4비트 양자화 후 loss 증가 | 모델을 1/8 크기로 압축해도 버티나 | +0.95 | **+0.33** |
-| 가중치 노이즈 민감도 | 가중치를 살짝 흔들면 얼마나 무너지나 | +0.016 | **+0.007** |
-| Hessian trace | 주변이 얼마나 뾰족한가 (평균 곡률) | 9,472 | **2,404** |
-| 마지막 층 표현 보존(CKA) | 추가 학습 후 내부 표현이 얼마나 유지되나 (약) | 0.69 | **0.78** |
-
-**잘 안 된 것**: BLiMP **하락폭** 자체는 못 줄였습니다. SAM 모델은 높은 점수에서 출발해서 끝나도 더 높게 남는 형태입니다.
-
-### 시간
-- 같은 **step 수** 기준으로는 Muon + 감쇠 구간 SAM이 가장 좋은 품질을 냅니다.
-- 하지만 T4 GPU의 **실제 시간** 기준으로는 AdamW가 약 1.5배 빠릅니다. Muon의 직교화 계산 비용 때문입니다. 그래서 "AdamW보다 빠르다"는 주장은 하지 않습니다.
-
----
-
-## 3. 연구가 흘러온 길
+## 1. 폴더 구조
 
 ```
-비전 (V1~V3)         이미지 모델(ResNet)에서는 효과 없음. 망각의 65%가 BatchNorm 통계 변화 탓
-   ↓  BatchNorm 없는 Transformer 언어모델로 이동
-LLM + AdamW (L1)     감쇠 구간 SAM(ρ 0.05)으로 망각 5~10% 감소
-   ↓  옵티마이저를 Muon으로
-LLM + Muon (L2~L3)   원래 SAM(유클리드)은 Muon에 거의 안 통함
-                     대신 "사전학습과 같은 옵티마이저로 추가 학습"하면 20~25% 덜 잊음
-   ↓  SpecSAM 논문: Muon에는 스펙트럼 방식이 맞다
-스펙트럼 SAM (L5~L7) 사전학습 성능까지 크게 개선. 망각 보호의 손잡이는 구간 길이가 아니라 ρ
-   ↓
-공정 비교 (L7b)      감쇠 구간 ρ 0.05 ≈ 전체 구간 ρ 0.05의 망각 보호를 절반 시간에
-   ↓
-지표 확장 (E1)       문법·양자화·노이즈·곡률·CKA 대부분 개선. 메커니즘: 평평한 방향으로 움직임
-시간 (T1)            step 기준 Muon 우위, 실제 시간은 AdamW 우위
-AdamW ρ 스윕 (E2)    ρ를 0.2까지 키우니 AdamW도 Muon만큼 망각 감소 → "옵티마이저 무관" 결론
+00_explore_CIFAR10/     H  7~8월 탐색: 베이스라인, Muon→SAM 전환, SAM Overlay, WSD 분기 구조, ViT 전이
+01_CIFAR100/            C  9월: sam_lab 패키지로 3개 옵티마이저 공정 비교, seed 검증
+02_vision_transfer/     V  9월 말: ImageNet-100 → Aircraft, 망각 측정
+03_LLM/                 L  10월: BabyLM → 파이썬 코드, AdamW·Muon·스펙트럼 SAM
+04_eval/                E·T  10월 말: 평가 지표 확장, 학습 시간, AdamW ρ 스윕, 2×3 격자
+report/                 최종 보고서, 그림 생성 코드(figs.py)
+```
+
+이름 규칙: `{번호}_{데이터}_{사전학습옵티마이저-파인튜닝옵티마이저}_{내용}.ipynb`
+번호는 실험 순서입니다. 같은 실험의 후속·변형은 `b`, `c`를 붙였습니다.
+
+---
+
+## 2. 연구 흐름 한눈에
+
+```
+H0a 베이스라인 ─ H1 옵티마이저 교체 → 모멘텀 리셋 문제 발견
+   └ H2·H3 SAM Overlay (옵티마이저는 그대로, SAM은 ascent만)
+       └ H4 WSD 공통 구간 → decay 구간만 SAM 끔/켬 분기 구조 확립
+           ├ H5 사전학습 → 전이 시도 (ViT)
+           └ C1~C3 CIFAR-100: 평평해지지만 정확도 이득은 노이즈 수준
+               └ (CMU 논문: 효과는 정확도가 아니라 파인튜닝 후 망각에서 나타남)
+                   └ V1·V2 비전 망각: 효과 작음, BatchNorm 통계가 망각의 대부분
+                       └ L1~L3 LLM(LayerNorm): AdamW에서 망각 감소, Muon은 유클리드 SAM이 안 맞음
+                           └ L5~L7 스펙트럼 SAM: Muon 망각 24~27% 감소, decay가 full과 비슷한 보호를 약 절반 시간에
+                               └ E1~E3 평가 지표 확장 + AdamW ρ 스윕 + 2×3 격자 (최종 결과)
 ```
 
 ---
 
-## 4. 노트북 목록
+## 3. 노트북 목록 (실행 순서)
 
-GitHub 파일 이름 = Kaggle 노트북 제목. 모든 노트북은 Kaggle T4 GPU에서 **Save & Run All** 한 번으로 실행됩니다.
+### 00_explore_CIFAR10 — 탐색 단계 (CIFAR-10 / Tiny-ImageNet)
 
-| 번호 | 파일 | 하는 일 | 핵심 결과 | 소요 |
-|---|---|---|---|---|
-| V1 | `sam-x-adamw-dacay-cmu.ipynb` | ImageNet-100 사전학습 → 항공기 사진 추가 학습 | 추가 학습이 너무 세서 판단 불가 | 3.5시간 |
-| V2 | `sam-x-adamw-dacay-cmu-finetuning.ipynb` | 약한 추가 학습 + BatchNorm 원인 분리 | 망각의 65%가 BN 통계 탓 → 비전 중단 | 3시간 |
-| L1 | `babylm-python-adamw.ipynb` | AdamW 사전학습 → AdamW 추가 학습 | 망각 5~10% 감소 | 3시간 |
-| L2 | `babylm-muon-adamw.ipynb` | Muon 사전학습 → AdamW 추가 학습 | 유클리드 SAM 효과 미미 | 4시간 |
-| L2b | `L2b_Muon_lr-sweep.ipynb` | Muon 학습률 재스윕 | 짧은 스윕 최적값 ≠ 전체 길이 최적값 | 1.3시간 |
-| L3 | `babylm-muon-muon.ipynb` | Muon 사전학습 → Muon 추가 학습 | 옵티마이저 일치 시 20~25% 덜 잊음 | 2시간 |
-| L5A | `L5A_Muon005_pretrain_euc-spec-full.ipynb` | 스펙트럼 SAM 사전학습 | 사전학습 loss 크게 개선 | 9시간 |
-| L5B | `L5B_Muon005-Muon_finetune.ipynb` | L5A 모델 추가 학습 | 전체 구간 SAM 망각 12~20% 감소 | 3시간 |
-| L6A | `L6A_Muon005_pretrain_window-rho.ipynb` | SAM 구간 길이·ρ 축 사전학습 | 이득은 마지막 20%에서 포화 | 7.5시간 |
-| L6B | `L6B_Muon005-Muon_finetune_window-rho.ipynb` | L6A 모델 추가 학습 | 망각 보호는 ρ가 결정 | 2.5시간 |
-| L7 | `L7_Muon005_fullspec005-decay01.ipynb` | 큰 ρ 시험 | ρ가 너무 크면 새 태스크를 덜 배움 | 6.5시간 |
-| L7b | `L7b_common-target_recompute.ipynb` | 비교 기준점 통일 (GPU 불필요) | 위 Muon 헤드라인의 출처 | — |
-| E1 | `E1_Muon005_eval_metrics.ipynb` | Muon 모델 평가 지표 확장 | 대부분 지표 개선, 메커니즘 확인 | 3시간 |
-| T1 | `T1_time-to-target.ipynb` | 목표 loss 도달 시간 (GPU 불필요) | step 기준 Muon, 실제 시간 AdamW | — |
-| E2 | `E2_AdamW_eval_rho-sweep.ipynb` | AdamW ρ 스윕 + 지표 + 두 옵티마이저 통합 비교 | ρ 0.2에서 망각 21~27% 감소 | 5시간 |
-
-**실행 순서(의존 관계)**: 뒤 노트북은 앞 노트북의 출력(모델 파일)을 Kaggle Input으로 받습니다.
-```
-V1 → V2
-L1 → E2          L2 → L3
-L5A → L5B
-L6A → L6B ─┐
-L6A → L7 ──┼→ L7b (L5B 포함)
-L6A, L7 → E1
-L1, L5A, L6A, L7 → T1
-```
-
----
-
-## 5. 설정
-
-### 모든 언어모델 실험에서 같은 것
-| 항목 | 값 |
-|---|---|
-| 모델 | GPT-2 스타일 6층·512차원·8헤드, 문맥 256, 4,480만 파라미터 |
-| 토크나이저 | GPT-2 |
-| 사전학습 | BabyLM-2026-Strict-Small (5%를 검증용으로 분리), 10 epoch = 19,140 step, 배치 32 |
-| 학습률 스케줄 | WSD: warmup 2% → 유지 → 마지막 20% 선형 감쇠 |
-| 기타 | weight decay 0.1, 그래디언트 클리핑 1.0, fp16, 사전학습 seed 0 |
-| 추가 학습 | codeparrot 파이썬 파일 1만 개, 1,000 step, seed 0·1·2, 사전학습과 같은 옵티마이저, SAM 없음 |
-| 평가 문장 | 모든 노트북에서 동일 (BabyLM 400문장, 코드 400문장) |
-
-### 옵티마이저에 맞춰 다르게 둔 것
-| 항목 | AdamW | Muon |
+| 파일 | 원래 이름 | 요약 |
 |---|---|---|
-| 학습률 | 1e-3 (각자 스윕) | 0.005 (임베딩 등은 보조 AdamW 1e-3) |
-| SAM 방식 | 유클리드 | 스펙트럼 |
-| 시험한 ρ | 0.02, 0.05, 0.1, 0.2 | 0.0005, 0.002, 0.008, 0.02, 0.05, 0.1 |
+| `H0a_CIFAR10_SGD-AdamW-SAM_baseline.ipynb` | Resnet18_CIFAR10 (1).ipynb | 첫 베이스라인. ResNet-18(CIFAR용 3×3 stem), 50ep. SGD 94.22%, AdamW 92.93%, SAM 94.69%. SAM 시간 약 1.8배 |
+| `H0b_CIFAR10_Lion-Muon_baseline.ipynb` | Untitled2.ipynb | Lion·Muon을 추가하려던 노트북. Colab이 CPU로 잡혀 실패, 결과 없음 |
+| `H1_CIFAR10_Muon-to-SGDSAM_switch-v1v2.ipynb` | Muon.ipynb | Muon으로 학습하다 SGD 기반 SAM으로 갈아타는 동적 스위칭. 84.43% / 85.10%. 갈아탄 직후 loss 급등 → **옵티마이저를 바꾸면 모멘텀이 리셋된다**는 문제 발견 |
+| `H2_CIFAR10_Muon_native-SAM.ipynb` | Muon_SAM_CIFAR_10.ipynb | Muon 모멘텀을 유지한 채 ascent만 얹는 방식. Muon만 85.35% vs native SAM 85.73% |
+| `H3_CIFAR10_Muon_overlay-ramp-v3.ipynb` | Muon_SAM_v3.ipynb | SAMAscent 클래스(옵티마이저와 분리된 SAM) 첫 정식 버전, ρ 램프. Muon만 86.20 / hybrid 86.07 / 처음부터 SAM 86.54%. sharpness는 0.50 → 0.11 |
+| `H3b_CIFAR10_Muon_scope-test-v4.ipynb` | Muon_SAM_v4.ipynb | Muon 적용 범위·weight decay 변경 시험. 개선 없음 |
+| `H4_CIFAR10_Lion_WSD-decaySAM-branch.ipynb` | wsd-x-sam-overlay.ipynb | **이후 모든 실험의 뼈대**: 공통 구간 체크포인트(모델+모멘텀) 저장 → decay 구간만 SAM 끔/켬 분기. 87.50 vs 87.64%, sharpness 0.204 → 0.094, 시간 1.9배 |
+| `H5_TinyImageNet-CIFAR10_ViT-Lion_FT-decaySAM.ipynb` | notebook926aa3574b.ipynb | 첫 전이 실험. ViT를 Tiny-ImageNet 사전학습 → CIFAR-10 파인튜닝, SAM은 파인튜닝 decay에만. 85.37 vs 85.34% (차이 없음) |
+| `H5b_CIFAR10_ViT-Lion_scratch-control.ipynb` | stage1 (1).ipynb | H5의 대조군(사전학습 없음). 코드만 있고 실행 결과 없음 |
+| `H5c_TinyImageNet_ViT-Lion_scratch-decaySAM.ipynb` | stage2.ipynb | ViT로 Tiny-ImageNet 직접 학습, decay SAM 분기. 47.09 vs 47.53%, sharpness 0.172 → 0.132 |
 
-각 노트북 Output의 `config.json`에 실제 사용한 설정이 저장되어 있습니다.
+※ H1~H3는 ImageNet용 7×7 stem을 써서 H0a보다 정확도가 약 8%p 낮습니다. H0a와 숫자를 직접 비교하면 안 됩니다.
+
+### 01_CIFAR100 — sam_lab 패키지로 공정 비교
+
+| 파일 | 원래 이름 | 요약 |
+|---|---|---|
+| `C1_CIFAR100_4opt_decaySAM-rho0.05.ipynb` | sam-overlay-4optimizers-kaggle-ipynb.ipynb | SGD·AdamW·Lion·Muon × SAM 끔/decay, ρ0.05, 30ep. 차이 −0.34~+0.02%p (노이즈 수준). 7×7 stem이라 정확도 55~59% |
+| `C2_samlab_code_v1_0908.zip` | archive_1.zip | sam_lab 코드 v1 (config, schedule, optim, models, data, engine, train, 스모크 테스트) |
+| `C2_samlab_code_v2_0908.zip` | archive_2.zip | v2: sweep.py 추가 |
+| `C2_samlab_code_v3_0916.zip` | archive_3.zip | v3: analysis.py, plots.py, analyze.py 추가. C2b·C3가 쓴 최종 코드 |
+| `C2a_CIFAR100_3opt_samlab-pilot-grid.ipynb` | notebookd68a24ce5b.ipynb | sam_lab 첫 실행. 스모크 테스트 통과 → 추정 lr로 3옵티마이저 × 끔/decay. 차이 −0.27~+0.34%p. SAM 비용 1.5~2배 |
+| `C2b-draft_CIFAR100_3opt_samlab-pipeline.ipynb` | s0-pilot.ipynb | C2b의 이전 버전. 연구 질문과 "새 알고리즘이 아니라 측정 설계가 기여"라는 범위가 적혀 있음. 실험 셀 출력 없음 |
+| `C2b_CIFAR100_3opt_lr-rho-sweep.ipynb` | notebook30cb78dff1.ipynb | 학습률 스윕(AdamW 0.003, Lion 3e-4, Muon 0.02) → ρ 스윕 18회(0.02~0.4). 차이 −0.29~+1.24%p |
+| `C3_CIFAR100_3opt_seed-variance.ipynb` | seded-seperate-test.ipynb | ρ0 vs ρ0.4 × seed 3개. λmax는 세 seed 모두 크게 감소(AdamW 62→20, Lion 137→31, Muon 66→35). 정확도는 Muon만 +2.03%p로 일관. 가지치기 강건성은 seed 노이즈보다 작음 |
+
+### 02_vision_transfer — ImageNet-100 → FGVC Aircraft
+
+| 파일 | 원래 이름 | 요약 |
+|---|---|---|
+| `V1_ImageNet100-Aircraft_AdamW-AdamW_decaySAM.ipynb` | sam-x-adamw-dacay-cmu.ipynb | ResNet-18 AdamW 100ep, 마지막 20ep SAM(ρ0.1). 정확도 72.00 vs 71.88%, λmax 66.4 → 11.8. 파인튜닝이 너무 세서 ImageNet 72% → 8~10%로 붕괴 |
+| `V2_ImageNet100-Aircraft_AdamW-AdamW_weakFT-sweep.ipynb` | sam-x-adamw-dacay-cmu-finetuning.ipynb | V1 모델로 약한 파인튜닝(lr 1e-4, 3e-5) × seed 3. 사전학습 SAM의 망각 감소는 방향은 일관되나 1%p 안팎 |
+
+※ V3(BatchNorm 통계 재보정: 망각의 65%가 BN 통계) 노트북은 남아 있지 않습니다. 결과는 프로젝트 기록에만 있습니다.
+
+### 03_LLM — BabyLM 사전학습 → 파이썬 코드 파인튜닝
+
+공통 설정: GPT-2형 6층·512차원, 4,480만 파라미터, BabyLM 1,570만 토큰 × 10 epoch(19,140 step), WSD(warmup 2%, 감쇠 20%), 파인튜닝 1,000 step × 약/강 × seed 3. 망각 = 파인튜닝 후 BabyLM 검증 loss 증가.
+
+| 파일 | 요약 | 입력 |
+|---|---|---|
+| `L1_BabyLM-Python_AdamW-AdamW.ipynb` (babylm-python-adamw) | AdamW lr 스윕 → 1e-3. decay 유클리드 SAM ρ0.05. λmax 113 → 67, 망각 5~10% 감소 (6/6) | — |
+| `L2_BabyLM-Python_Muon-AdamW.ipynb` (babylm-muon-adamw) | Muon(lr 0.01) 사전학습 → AdamW 파인튜닝. Muon이 λmax 2.2배, 망각 65% 더 큼. 유클리드 SAM 효과 거의 없음 | — |
+| `L2b_BabyLM_Muon_lr-resweep.ipynb` (muon-rho, 이름과 달리 lr 스윕) | Muon lr 0.0025/0.005/0.01 → 0.005 선택 (이후 실험에서 사용) | — |
+| `L3_BabyLM-Python_Muon-Muon.ipynb` (babylm-muon-muon) | L2 모델을 Muon으로 파인튜닝. **같은 옵티마이저로 파인튜닝하면 20~25% 덜 잊음** (0.753 / 0.798) | L2 |
+| `L5A_Muon005_pretrain_euc-spec-full.ipynb` | Muon 0.005 사전학습 6갈래: off / decay 유클리드 / decay 스펙트럼 ρ 5e-4·2e-3·8e-3 / full 스펙트럼 8e-3. loss 3.390 / 3.370 / … / 3.284 / 3.265 | — |
+| `L5B_Muon005-Muon_finetune.ipynb` | L5A 6개 모델 Muon 파인튜닝 36회. full 스펙트럼 망각 −20%, decay ρ0.008은 −5% | L5A |
+| `L6A_Muon005_pretrain_window-rho.ipynb` | SAM 구간 40/60% (ρ0.008) + decay ρ 0.02·0.05. off 재현(3.380) | — |
+| `L6B_Muon005-Muon_finetune_window-rho.ipynb` | L6A 5개 모델 파인튜닝 30회. **decay ρ0.05 망각 −21% / −20%**. 구간을 늘리는 것보다 ρ를 키우는 게 효과적 | L6A |
+| `L7_Muon005_fullspec005-decay01.ipynb` | decay ρ0.1(L6A 80%에서) + full 스펙트럼 ρ0.05(처음부터) 사전학습·파인튜닝. 큰 ρ는 새 태스크 학습을 해침 | L6A, L6B, L5B |
+| `L7b_common-target_recompute.ipynb` | GPU 불필요. L5B·L6B·L7 곡선을 모아 **8개 모델 공통 기준점**에서 망각 재계산. decay ρ0.05가 full ρ0.05 보호의 96~126% | L5B, L6B, L7 |
+
+### 04_eval — 평가 지표 확장과 최종 비교
+
+| 파일 | 요약 | 입력 |
+|---|---|---|
+| `E1_Muon005_eval_metrics.ipynb` | Muon 4개 모델(off, decay 0.02·0.05, full 0.05)에 BLiMP, INT8/INT4 양자화, 가중치 노이즈, Hutchinson trace, λmax, CKA, 방향 곡률·2차 근사. 파인튜닝 24회 (L6B 결과 재현 확인) | L6A, L7 |
+| `T1_time-to-target.ipynb` | GPU 불필요. 사전학습 로그로 목표 loss 도달 시간 비교. step 기준은 Muon 우위, 실제 시간은 AdamW가 약 1.5배 빠름 | L1, L5A, L6A, L7 |
+| `E2_AdamW_eval_rho-sweep.ipynb` | L1 80% 체크포인트에서 AdamW decay ρ 0.02·0.1·0.2 추가, E1과 같은 지표, 파인튜닝 30회 (L1 결과 재현 확인). Muon과 통합 비교 | L1, E1 |
+| `E3_AdamW_decay-rho-full.ipynb` | AdamW decay ρ 0.5·1.0 + full SAM ρ1.0(L1과 같은 초기값·배치 순서로 처음부터). **최종 2×3 격자**: AdamW decay ρ1.0 망각 −51/−43%, full −12/−16%. Muon decay −27/−24%, full −28/−19% | L1, E1, E2 |
+
+### report
+
+| 파일 | 요약 |
+|---|---|
+| `figs.py` | 보고서 그림 중 노트북에서 나오지 않은 3장(WSD 스케줄, AdamW ρ 그래프, Muon ρ 그래프). 숫자는 E2·E3, L6·L7b 결과를 옮겨 적음 |
+| 최종 보고서 PDF | 교수님께 제출한 버전 |
 
 ---
 
-## 6. 한계
+## 4. 노트북 사이 데이터 흐름 (Kaggle Input 연결)
 
-- **작은 규모**: 모델 4,480만 파라미터, 데이터 1,570만 토큰, 데이터 쌍 1개(영어 → 파이썬). 큰 모델에서의 효과는 CMU 논문(OLMo-2-1B, AdamW)이 보고한 결과에 기댑니다
-- **사전학습 seed 1개** (추가 학습 seed는 3개). 같은 seed 재실행 간 사전학습 loss 변동은 약 0.01로, 주장하는 효과보다 10배 이상 작음
-- **AdamW 최적 ρ 미확정**: 0.2가 시험 범위의 끝. 더 큰 ρ와 AdamW 전체 구간 SAM은 아직 미실행
-- **Muon 학습률**: 주 실험의 0.005는 전체 길이 기준으로 0.01보다 약간 불리했을 수 있음 (SAM 없음 loss 0.04 차이). 0.01 기준으로 봐도 감쇠 구간 SAM의 사전학습 이득은 유지
-- **문법 점수 하락폭**은 줄이지 못함
-- **실제 시간**은 T4에서 AdamW가 더 빠름
+```
+L1 (exp_llm_adamw) ──────────────┬─→ E2 (exp_e2) ──→ E3 (exp_e3)
+                                 └──────────────────→ E3
+L2 (exp_llm_muon) ──→ L3
+L5A (exp_l5_pretrain) ──→ L5B (exp_l5_finetune) ─┐
+L6A (exp_l6_pretrain) ──→ L6B (exp_l6_finetune) ─┼─→ L7 (exp_l7) ──→ L7b
+                    └──→ L7, E1                  │
+E1 (exp_e1) ──→ E2, E3                           │
+L1, L5A, L6A, L7 로그 ──→ T1                      │
+V1 (exp_adamw) ──→ V2
+```
 
 ---
 
-## 7. 참고 문헌
+## 5. 보고서 숫자 ↔ 노트북
 
-- Foret et al., *Sharpness-Aware Minimization for Efficiently Improving Generalization*, ICLR 2021
-- Watts et al., *Sharpness-Aware Pretraining Mitigates Catastrophic Forgetting*, arXiv 2605.02105 (CMU) — 사전학습 후반 SAM이 망각을 줄임 (AdamW, OLMo-2-1B)
-- *Optimizer-Model Consistency: Full Finetuning with the Same Optimizer as Pretraining Forgets Less*, arXiv 2605.06654
-- Zhong, Milsom, Murray, *Sharpness-Aware Minimization and Muon: Robustness under the Spectral Norm*, arXiv 2607.26001 (SpecSAM)
-- Andriushchenko et al., *Sharpness-Aware Minimization Efficiently Selects Flatter Minima Late in Training*, ICLR 2025
-- Jordan et al., *Muon: An optimizer for hidden layers in neural networks*, 2024
-- BabyLM Challenge; Warstadt et al., *BLiMP*, TACL 2020
+| 보고서 | 출처 |
+|---|---|
+| 1.1·1.2 CIFAR에서 정확도 이득 없음 | C1, C2a, C2b, C3 |
+| 1.3 비전에서 BatchNorm 의심 | V1, V2 (V3 노트북 없음) |
+| 1.3 Muon λmax 2.2배, 망각 65% 더 큼, SAM 후 λmax 3.5배 감소, 망각 1.5% 감소 | L1, L2 |
+| 1.4 Muon loss 3.390 / 3.370 / 3.284 | L5A |
+| 1.4 ρ0.05에서 망각 24~27% 감소 | L6A, L6B, L7b, E1 |
+| 1.5 AdamW ρ0.05 망각 5~10% | L1 |
+| 3.1 2×3 격자표, 그림 grid.png | E3 |
+| 3.2 AdamW ρ 0.02~1.0 | E2, E3 |
+| 3.2 Muon ρ 축, SAM 구간 20/40/60% | L5A~L7, L7b |
+| 3.3 BLiMP·INT4·노이즈·CKA (그림 e1_panel.png) | E1 (Muon), E2·E3 (AdamW) |
+| 3.4 방향 곡률, 2차 근사 | E1, E2, E3 |
+| 3.5 학습 시간 (그림 t1_time.png) | T1 |
+| 옵티마이저 일관성 20~25% | L3 |
 
-자세한 숫자는 `docs/` 폴더의 실험 기록 참고.
+---
+
+## 6. 설정 일관성 점검 결과 (2026-10-30)
+
+노트북 코드를 직접 파싱해 함수 정의와 설정값을 노트북끼리 대조했습니다.
+
+**일치 확인**
+- L1~E3의 모델 구조, 데이터 처리, 평가 문장(BabyLM seed 11, 코드 seed 12), 학습률 스케줄, 파인튜닝 배치 순서, 망각 계산(baby_at)이 모두 같은 코드입니다.
+- 평가 지표 함수(BLiMP, 양자화, 노이즈, Hutchinson, CKA, 방향 곡률)는 E1·E2·E3에서 같은 코드입니다.
+- AdamW 갈래(L1, E2, E3)는 모두 L1의 같은 80% 체크포인트에서 분기합니다. E3 full SAM은 L1과 같은 초기값·같은 배치 순서로 처음부터 학습합니다.
+- Muon 갈래는 각자의 80% 체크포인트(L5A, L6A)에서 분기합니다. L7의 decay ρ0.1은 L6A 체크포인트에서 출발합니다.
+- E1은 L6B 망각을, E2는 L1 망각을 소수 넷째 자리까지 재현합니다.
+
+**의도적으로 다른 것**: 옵티마이저별 학습률(AdamW 1e-3, Muon 0.005), SAM 방식(유클리드 / 스펙트럼), ρ 범위, 파인튜닝 옵티마이저(사전학습과 같은 것)
+
+**알고 있는 한계**
+1. Muon "SAM 없음" 기준선이 두 개(L5A 3.390, L6A 3.380). 같은 코드·seed로 두 번 돌린 값이고, 각 비교는 자기 계열 기준선과 짝지음
+2. SAM 구간 길이 축의 사전학습 loss는 L5A(20·100%)와 L6A(40·60%) 실행이 섞여 있어, 정밀한 비율은 의미가 약함
+3. 비용 배수: Muon은 실제 실행 시간 비율, AdamW(E2·E3)는 같은 세션에서 step 시간을 재서 계산
+4. 실행 환경: L1·L2는 torch 2.10, L5A 이후는 2.11. 시간 비교에만 영향(약 10%)
+5. Muon lr 0.005는 짧은 스윕 최적값. 사전학습 seed 1개, ρ를 같은 데이터 결과로 선택
+6. sam_lab의 sweep.py에 AdamW lr 0.01이 남아 있었으나 C2b는 0.003으로 돌았고, C3에서 0.003으로 맞춤
+7. 기준점이 다른 두 감소율: AdamW끼리 비교(E3 셀 7)는 49.4/32.7%, AdamW·Muon 6개 공통 지점(E3 셀 9)은 51/42.5%
+
+---
+
+## 7. 실행 방법
+
+1. Kaggle 노트북 설정: Accelerator **GPU T4**, Internet **On**
+2. 입력이 필요한 노트북은 Add Input에서 위 데이터 흐름의 이전 노트북 출력을 붙입니다. 노트북이 `find_input()`으로 폴더를 자동으로 찾습니다.
+3. 위에서 아래로 순서대로 실행합니다. 대부분 체크포인트를 저장하므로 세션이 끊겨도 다시 실행하면 이어서 돕니다.
+4. 대략적인 시간(T4): L1 3시간, L5A 9시간, L6A 7.5시간, L7·E1·E2·E3 각 2~5시간
