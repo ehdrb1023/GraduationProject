@@ -3,7 +3,7 @@
 WSD 학습률 스케줄의 마지막 감쇠 구간(20%)에만 SAM을 켰을 때, 사전학습 성능과 파인튜닝 후 망각이 어떻게 달라지는지 AdamW(유클리드 SAM)와 Muon(스펙트럼 SAM)에서 비교한 실험 코드 모음입니다. 모든 실험은 Kaggle T4 GPU 1개로 돌렸습니다.
 
 - 최종 보고서: `report/Investigating_the_Effects_of_Decay-Phase_SAM_on_AdamW_and_Muon.pdf`
-- 모든 노트북은 실행 결과(출력)가 저장된 상태입니다. 다시 돌리지 않아도 숫자를 확인할 수 있습니다.
+- 노트북은 실행 결과(출력)가 저장된 상태라 다시 돌리지 않아도 숫자를 확인할 수 있습니다. 예외: `H5b`(코드만 있음), `C2b-draft`(실험 셀 출력 없음)
 
 ---
 
@@ -18,7 +18,8 @@ WSD 학습률 스케줄의 마지막 감쇠 구간(20%)에만 SAM을 켰을 때,
 report/                 최종 보고서, 그림 생성 코드(figs.py)
 ```
 
-이름 규칙: `{번호}_{데이터}_{사전학습옵티마이저-파인튜닝옵티마이저}_{내용}.ipynb`
+이름 규칙: `{번호}_{데이터}_{옵티마이저}_{내용}.ipynb`
+옵티마이저 자리는 전이 실험이면 `사전학습-파인튜닝`, 베이스라인이면 비교한 옵티마이저 목록입니다.
 번호는 실험 순서입니다. 같은 실험의 후속·변형은 `b`, `c`를 붙였습니다.
 
 ---
@@ -26,7 +27,7 @@ report/                 최종 보고서, 그림 생성 코드(figs.py)
 ## 2. 연구 흐름 한눈에
 
 ```
-H0a 베이스라인 ─ H1 옵티마이저 교체 → 모멘텀 리셋 문제 발견
+H0a·H0b 베이스라인(5개 옵티마이저) ─ H1 옵티마이저 교체 → 모멘텀 리셋 문제 발견
    └ H2·H3 SAM Overlay (옵티마이저는 그대로, SAM은 ascent만)
        └ H4 WSD 공통 구간 → decay 구간만 SAM 끔/켬 분기 구조 확립
            ├ H5 사전학습 → 전이 시도 (ViT)
@@ -47,7 +48,7 @@ H0a 베이스라인 ─ H1 옵티마이저 교체 → 모멘텀 리셋 문제 �
 | 파일 | 원래 이름 | 요약 |
 |---|---|---|
 | `H0a_CIFAR10_SGD-AdamW-SAM_baseline.ipynb` | Resnet18_CIFAR10 (1).ipynb | 첫 베이스라인. ResNet-18(CIFAR용 3×3 stem), 50ep. SGD 94.22%, AdamW 92.93%, SAM 94.69%. SAM 시간 약 1.8배 |
-| `H0b_CIFAR10_Lion-Muon_baseline.ipynb` | Untitled2.ipynb | Lion·Muon을 추가하려던 노트북. Colab이 CPU로 잡혀 실패, 결과 없음 |
+| `H0b_CIFAR10_Lion-Muon_baseline.ipynb` | Untitled2.ipynb | H0a와 같은 모델·설정에 Lion·Muon 추가, 50ep. Lion 92.70%, Muon 94.30%. epoch 시간 Lion 49.2초, Muon 64.8초. 마지막 셀에서 H0a 결과와 합쳐 5종 비교표 |
 | `H1_CIFAR10_Muon-to-SGDSAM_switch-v1v2.ipynb` | Muon.ipynb | Muon으로 학습하다 SGD 기반 SAM으로 갈아타는 동적 스위칭. 84.43% / 85.10%. 갈아탄 직후 loss 급등 → **옵티마이저를 바꾸면 모멘텀이 리셋된다**는 문제 발견 |
 | `H2_CIFAR10_Muon_native-SAM.ipynb` | Muon_SAM_CIFAR_10.ipynb | Muon 모멘텀을 유지한 채 ascent만 얹는 방식. Muon만 85.35% vs native SAM 85.73% |
 | `H3_CIFAR10_Muon_overlay-ramp-v3.ipynb` | Muon_SAM_v3.ipynb | SAMAscent 클래스(옵티마이저와 분리된 SAM) 첫 정식 버전, ρ 램프. Muon만 86.20 / hybrid 86.07 / 처음부터 SAM 86.54%. sharpness는 0.50 → 0.11 |
@@ -98,6 +99,8 @@ H0a 베이스라인 ─ H1 옵티마이저 교체 → 모멘텀 리셋 문제 �
 | `L7_Muon005_fullspec005-decay01.ipynb` | decay ρ0.1(L6A 80%에서) + full 스펙트럼 ρ0.05(처음부터) 사전학습·파인튜닝. 큰 ρ는 새 태스크 학습을 해침 | L6A, L6B, L5B |
 | `L7b_common-target_recompute.ipynb` | GPU 불필요. L5B·L6B·L7 곡선을 모아 **8개 모델 공통 기준점**에서 망각 재계산. decay ρ0.05가 full ρ0.05 보호의 96~126% | L5B, L6B, L7 |
 
+※ L4 번호는 계획만 하고 실행하지 않은 실험이라 노트북이 없습니다. L3 다음은 L5A입니다.
+
 ### 04_eval — 평가 지표 확장과 최종 비교
 
 | 파일 | 요약 | 입력 |
@@ -123,7 +126,7 @@ L1 (exp_llm_adamw) ──────────────┬─→ E2 (exp_e
                                  └──────────────────→ E3
 L2 (exp_llm_muon) ──→ L3
 L5A (exp_l5_pretrain) ──→ L5B (exp_l5_finetune) ─┐
-L6A (exp_l6_pretrain) ──→ L6B (exp_l6_finetune) ─┼─→ L7 (exp_l7) ──→ L7b
+L6A (exp_l6_pretrain) ──→ L6B (exp_l6_finetune) ─┼─→ L7 (exp_l7) ──→ L7b, E1
                     └──→ L7, E1                  │
 E1 (exp_e1) ──→ E2, E3                           │
 L1, L5A, L6A, L7 로그 ──→ T1                      │
